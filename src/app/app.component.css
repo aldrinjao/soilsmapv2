@@ -1,0 +1,240 @@
+.map {
+  height: 50vh;
+  padding: 0;
+}
+
+.mat-elevation-z8{
+  width: 90%;
+  margin: 20px auto;
+  
+}
+
+.mat-elevation-z8 table{
+  width: 100%;
+}
+
+.mat-elevation-z8 table th{
+  text-align:center;
+}
+
+.filter-box {
+  width: 220px;
+  height: 280px;
+  border: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: move;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #fff;
+  border-radius: 4px;
+  position: absolute;
+  top:20px;
+  left:20px;
+  z-index: 1000;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+              0 2px 2px 0 rgba(0, 0, 0, 0.14),
+              0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.filter-box:active {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.filter-handle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #ccc;
+  cursor: move;
+  width: 24px;
+  height: 24px;
+}
+
+
+.hide-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+}
+
+.filter-forms{
+  position: absolute;
+  top: 60px;
+}
+
+.filter-control{
+  font-size: 16px;
+  width: 90%;
+}
+
+.mat-column-barangay {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 25% !important;
+  width: 25% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.column-crop {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-ph {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 11.2% !important;
+  width: 11.2% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-om {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 11.2% !important;
+  width: 11.2% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-n {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 11.2% !important;
+  width: 11.2% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-p {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 11.2% !important;
+  width: 11.2% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-k {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 11.2% !important;
+  width: 11.2% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.filter-spacer{
+  width: 100%;
+}
+
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: #777;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+  min-height: 100px;
+  padding-left: 5%;
+  
+}
+
+
+.example-element-description{
+
+  font-size:1.2em;
+}
+
+.desc-label{
+  font-weight: 500;
+  width: 10%;
+}
+
+.desc-content{
+  width: 20%;
+}
+
+#tdesc tr{
+  border: 1px solid black;
+  padding: 5px;
+}
+
+#cropselect{
+  min-width: 0px;
+}
