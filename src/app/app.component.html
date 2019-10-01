@@ -258,7 +258,17 @@
 
               {{element.textual_grade}}
             </td>
+            <td class="desc-label" *ngIf="element.hasUrl">
+              Soil Profile
+            </td>
+            <td class="desc-content" *ngIf="element.hasUrl">
+              
+                <a target="new" href={{element.url}} >View Soil Profile</a>
+              
+            </td>
 
+          </tr>
+          <tr>
             <td class="desc-label">
               Remarks
             </td>

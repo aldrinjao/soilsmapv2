@@ -1,4 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';  
+
 import { NgModule } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -58,6 +60,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
   ],
   exports: [],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     LeafletModule.forRoot(),

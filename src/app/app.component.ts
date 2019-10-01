@@ -29,6 +29,8 @@ export interface SoilSample {
   long: number;
   lat: number;
   date: string;
+  url: string;
+  hasUrl: boolean;
 }
 
 
@@ -64,7 +66,7 @@ export class AppComponent {
 
   sites = new FormControl();
   // tslint:disable-next-line:max-line-length
-  siteList: string[] = ['Laguna', 'Albay', 'Ilocos Norte', 'Oriental Mindoro', 'Nueva Ecija', 'Isabela','North Cotabato', 'Misamis Oriental', 'Cebu', 'Bukidnon', 'Iloilo'];
+  siteList: string[] = ['Laguna', 'Albay', 'Ilocos Norte', 'Oriental Mindoro', 'Nueva Ecija', 'Isabela', 'North Cotabato', 'Misamis Oriental', 'Cebu', 'Bukidnon', 'Iloilo'];
 
   siteFilter = [];
   cropFilter = [];
@@ -91,10 +93,6 @@ export class AppComponent {
   OpenStreet = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   });
-
-
-
-
 
   basemaps = {
     'ESRI World Imagery': this.worldImagery,
@@ -128,6 +126,12 @@ export class AppComponent {
       next: x => {
         x.forEach(sample => {
 
+          let flag = false;
+          if (sample.url.length > 0) {
+            flag = true;
+          };
+
+
           const tempObject = {
             // insert the id too
             id: sample.id,
@@ -147,6 +151,8 @@ export class AppComponent {
             long: sample.long,
             lat: sample.lat,
             date: sample.date,
+            url: sample.url,
+            hasUrl: flag
           };
           this.SOIL_DATA.push(tempObject);
 
@@ -178,7 +184,7 @@ export class AppComponent {
       const tempMarker = marker([samplepoint.lat, samplepoint.long], { icon: regularIcon });
 
       // tslint:disable-next-line:max-line-length
-      const popupContent = samplepoint.crop+'<br>'+samplepoint.barangay+'<br>N: '+samplepoint.n+'<br>P: '+samplepoint.p+'<br>K: '+samplepoint.k+'<br>Organic Matter: '+samplepoint.om;
+      const popupContent = '<span style=\'font-size:1.5em;font-weight:500;\'>' + samplepoint.crop + '</span><br>' + samplepoint.barangay + '<br>N: ' + samplepoint.n + '<br>P: ' + samplepoint.p + '<br>K: ' + samplepoint.k + '<br>Organic Matter: ' + samplepoint.om;
 
       tempMarker.bindPopup(popupContent);
 
