@@ -228,6 +228,7 @@ tr.example-element-row:not(.example-expanded-row):active {
 
 .desc-content{
   width: 20%;
+  padding-right: 5px;
 }
 
 #tdesc tr{
