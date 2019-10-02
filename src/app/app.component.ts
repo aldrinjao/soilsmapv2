@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Map, latLng, tileLayer, marker, LayerGroup, control } from 'leaflet';
-import { AngularFireDatabase, AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
 import { MatTable, MatTableDataSource } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SoilIcons } from './markers'
+import { SoilIcons } from './markers';
+import * as XLSX from 'xlsx';
 
 
+// const html2maker = new html2PDF();
 
 export interface SoilSample {
   id: number;
@@ -48,11 +50,19 @@ export interface SoilSample {
 })
 
 
-
-
 export class AppComponent {
 
-  displayedColumns: string[] = ['barangay', 'crop', 'ph', 'om', 'n', 'p', 'k'];
+  displayedColumns: string[] = [
+    'date',
+    'barangay',
+    'crop',
+    'ph',
+    'om',
+    'n',
+    'p',
+    'k'
+  ];
+
   SOIL_DATA: SoilSample[] = [];
   dataSource1 = new MatTableDataSource<SoilSample>();
   map;
@@ -62,11 +72,30 @@ export class AppComponent {
   markers: SoilIcons = new SoilIcons();
 
   crops = new FormControl();
-  cropList: string[] = ['Rice', 'Corn', 'Cacao/Coffee', 'Sugarcane', 'Tomato', 'Banana', 'Soybean'];
+  cropList: string[] = [
+    'Rice',
+    'Corn',
+    'Cacao/Coffee',
+    'Sugarcane',
+    'Tomato',
+    'Banana',
+    'Soybean'
+  ];
 
   sites = new FormControl();
   // tslint:disable-next-line:max-line-length
-  siteList: string[] = ['Laguna', 'Albay', 'Ilocos Norte', 'Oriental Mindoro', 'Nueva Ecija', 'Isabela', 'North Cotabato', 'Misamis Oriental', 'Cebu', 'Bukidnon', 'Iloilo'];
+  siteList: string[] = [
+    'Laguna',
+    'Albay',
+    'Ilocos Norte',
+    'Oriental Mindoro',
+    'Nueva Ecija',
+    'Isabela',
+    'North Cotabato',
+    'Misamis Oriental',
+    'Cebu',
+    'Bukidnon', 'Iloilo'
+  ];
 
   siteFilter = [];
   cropFilter = [];
@@ -109,13 +138,15 @@ export class AppComponent {
     zoom: 5,
     minZoom: 5,
     zoomControl: false,
-    center: latLng([12.6, 121.726909])
+    center: latLng([12.6, 121.726909]),
+    maxZoom: 17
   };
 
 
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('sampleTable') nativetable: ElementRef;
 
 
   constructor(db: AngularFireDatabase) {
@@ -129,8 +160,7 @@ export class AppComponent {
           let flag = false;
           if (sample.url.length > 0) {
             flag = true;
-          };
-
+          }
 
           const tempObject = {
             // insert the id too
@@ -175,16 +205,38 @@ export class AppComponent {
 
     items.forEach(samplepoint => {
 
-      console.log(samplepoint.crop + this.markers.iconList[samplepoint.crop]);
       const regularIcon = this.markers.iconList[samplepoint.crop].regular;
       const biggerIcon = this.markers.iconList[samplepoint.crop].big;
-
 
       // tslint:disable-next-line:max-line-length
       const tempMarker = marker([samplepoint.lat, samplepoint.long], { icon: regularIcon });
 
       // tslint:disable-next-line:max-line-length
-      const popupContent = '<span style=\'font-size:1.5em;font-weight:500;\'>' + samplepoint.crop + '</span><br>' + samplepoint.barangay + '<br>N: ' + samplepoint.n + '<br>P: ' + samplepoint.p + '<br>K: ' + samplepoint.k + '<br>Organic Matter: ' + samplepoint.om;
+      let popupContent = '<span style=\'font-size:1.5em;font-weight:500;\'>' + samplepoint.crop + '</span><br>' + samplepoint.barangay + '<br>Long: ' + samplepoint.long + '<br>Lat: ' + samplepoint.lat;
+
+      if (samplepoint.n.length > 0) {
+        popupContent = popupContent + '<br>N: ' + samplepoint.n;
+      }
+
+      if (samplepoint.p.length > 0) {
+        popupContent = popupContent + '<br>P:' + samplepoint.p;
+      }
+
+
+      if (samplepoint.k.length > 0) {
+        popupContent = popupContent + '<br>K: ' + samplepoint.k;
+      }
+
+
+      if (samplepoint.om.length > 0) {
+        popupContent = popupContent + '<br>OM: ' + samplepoint.om;
+      }
+
+
+
+      if (samplepoint.hasUrl === true) {
+        popupContent = popupContent + '<br>Soil Profile: <a target = "new" href="' + samplepoint.url + '">View Soil Profile</a>'
+      }
 
       tempMarker.bindPopup(popupContent);
 
@@ -213,7 +265,6 @@ export class AppComponent {
     control.layers(this.basemaps).addTo(map);
 
   }
-
 
   filterSelection() {
 
@@ -263,9 +314,6 @@ export class AppComponent {
     this.createMarkers(res);
   }
 
-
-
-
   mouseEnter() {
     this.map.dragging.disable();
     this.map.touchZoom.disable();
@@ -273,14 +321,12 @@ export class AppComponent {
     this.map.scrollWheelZoom.disable();
   }
 
-
   mouseLeave() {
     this.map.dragging.enable();
     this.map.touchZoom.enable();
     this.map.doubleClickZoom.enable();
     this.map.scrollWheelZoom.enable();
   }
-
 
   applyFilter(filterValue: string) {
     this.dataSource1.filter = filterValue.trim().toLowerCase();
@@ -295,7 +341,5 @@ export class AppComponent {
     });
   }
 
-}
 
-// layer control. keep an array or list of active layers, then rebuild the layerMainGroup everytime the list changes
-// https://www.google.com/search?q=%27&oq=%27&aqs=chrome..69i57.2j0j4&sourceid=chrome&ie=UTF-8
+}

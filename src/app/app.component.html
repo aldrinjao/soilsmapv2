@@ -1,6 +1,3 @@
-
-
-
 <div> 
 <mat-toolbar>
   <mat-toolbar-row>
@@ -63,256 +60,297 @@
     <mat-sidenav-content fxFlexFill>
 
 
-<div>
+      <div>
+
+      <div id="boundary" style="background: red;">
+
+        <div  class="map"
+              leaflet
+              [leafletOptions]="options"
+              (leafletMapReady)="onMapReady($event)"
+              >
+
+        <div class="filter-box" cdkDrag cdkDragBoundary='#boundary' (mouseenter) ="mouseEnter()" (mouseleave)="mouseLeave()">
+
+          <div class="hide-button">
+            <mat-icon>home</mat-icon>
+            
+          </div>
+          
+          <div class="filter-handle" cdkDragHandle>
+            <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+              <path d="M0 0h24v24H0z" fill="none"></path>
+            </svg>
+          </div>
+        
+          <div class="filter-forms" style="width: 100%;height:100%;">
+
+          <span style="font-size:1.2em">Soil Physical and Chemical Characteristics Database</span>
+          <mat-form-field class="filter-control" >
+            <mat-label>Filter by crop</mat-label>
+            <mat-select [formControl]="crops" multiple id="cropselect">
+              <mat-option *ngFor="let crop of cropList" [value]="crop" checked>{{crop}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+          <mat-form-field class="filter-control">
+            <mat-label>Filter by province</mat-label>
+            <mat-select [formControl]="sites" multiple>
+              <mat-option *ngFor="let site of siteList" [value]="site" checked>{{site}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        <button (click)="filterSelection()">Filter</button>
+
+
+          </div>
+        
+        
+        
+        </div>
+        </div>
 
 
 
 
-
-
-
-
-
-<div id="boundary" style="background: red;">
-
-  <div  class="map"
-        leaflet
-        [leafletOptions]="options"
-        (leafletMapReady)="onMapReady($event)"
-        >
-
-  <div class="filter-box" cdkDrag cdkDragBoundary='#boundary' (mouseenter) ="mouseEnter()" (mouseleave)="mouseLeave()">
-
-    <div class="hide-button">
-      <mat-icon>home</mat-icon>
-      
-    </div>
-    
-    <div class="filter-handle" cdkDragHandle>
-      <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
-        <path d="M0 0h24v24H0z" fill="none"></path>
-      </svg>
-    </div>
-  
-    <div class="filter-forms" style="width: 100%;height:100%;">
-
-    <span style="font-size:1.2em">Soil Physical and Chemical Characteristics Database</span>
-    <mat-form-field class="filter-control" >
-      <mat-label>Filter by crop</mat-label>
-      <mat-select [formControl]="crops" multiple id="cropselect">
-        <mat-option *ngFor="let crop of cropList" [value]="crop" checked>{{crop}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-
-    <mat-form-field class="filter-control">
-      <mat-label>Filter by province</mat-label>
-      <mat-select [formControl]="sites" multiple>
-        <mat-option *ngFor="let site of siteList" [value]="site" checked>{{site}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-  <button (click)="filterSelection()">Filter</button>
-
-
-    </div>
-  
-  
-  
-  </div>
-  </div>
-
-
-
-
-</div>
-
-
-
-<div class="mat-elevation-z8">
-  <div style="width: 70%; padding-top: 20px; margin: auto;text-align:center;font-weight:300px;">
-    <span style="font-size:1.5em;">Soil Physical and Chemical Characteristics Database</span><br>
-    <span  style="font-size: 0.9em; font-weight: 300;">Soil samples were sent to the laboratory for physical, chemical, and mineralogical analyses. The results obtained from the lab will be the baseline data that researchers will utilize for their fertilizer application and water and crop management. The same lab results will be utilized as baseline data by crop modelers for their crop model development.
-    </span>
-  </div>
-
-  <div id="tsetsetse" style="width: 40%; padding-top: 20px; margin: auto;">
-    <mat-form-field style="width: 100%;">
-      <input  matInput (keyup)="applyFilter($event.target.value)" placeholder="Type here to search">
-    </mat-form-field>
-  </div>
-
-
-
-<table  mat-table
-        matSort
-        [dataSource]="dataSource1" multiTemplateDataRows
-       >
-
-
-
-
-  <ng-container matColumnDef="barangay">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
-    <td mat-cell *matCellDef="let element"> {{element.barangay}}, {{element.province}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="crop">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Crop </th>
-    <td mat-cell *matCellDef="let element"> {{element.crop}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="ph">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> pH </th>
-    <td mat-cell *matCellDef="let element"> {{element.ph}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="om">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Organic Matter (OM) </th>
-    <td mat-cell *matCellDef="let element"> {{element.om}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="n">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nitrogen (N) </th>
-    <td mat-cell *matCellDef="let element"> {{element.n}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="p">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Phosphorus (P) </th>
-    <td mat-cell *matCellDef="let element"> {{element.p}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="k">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Potassium (K) </th>
-    <td mat-cell *matCellDef="let element"> {{element.k}} </td>
-  </ng-container>
-
-
-  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-  <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-      <div class="example-element-detail"
-           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-
-        <table id="tdesc" style="border:1px solid black;padding: 10px;">
-          <tr>
-            <td class="desc-label">
-              Sampling Date
-            </td>
-            <td colspan="5">
-              {{element.date | date: 'mediumDate'}}
-            </td>
-          </tr>
-
-          <tr>
-            <td class="desc-label">
-              Collaborator
-            </td>
-            <td class="desc-content">
-             {{element.collaborator}}
-            </td>
-            <td class="desc-label">
-              Longitude              
-            </td>
-            <td class="desc-content">
-              {{element.long}}
-            </td>
-            <td class="desc-label">
-              Latitude
-            </td>
-            <td class="desc-content">
-              {{element.lat}}
-            </td>
-          </tr>
-
-          <tr>
-            <td class="desc-label">
-              Barangay/Site              
-            </td>
-            <td class="desc-content">
-
-             {{element.barangay}}
-            </td>
-
-            <td class="desc-label">
-              Municipality
-            </td>
-            <td class="desc-content">
-              {{element.municipality}}
-            </td>
-
-            <td class="desc-label">
-              Province
-            </td>
-            <td class="desc-content">
-              {{element.province}}
-            </td>
-          </tr>
-
-          <tr>
-            <td class="desc-label">
-              Textual Grade
-            </td>
-            <td class="desc-content">
-
-              {{element.textual_grade}}
-            </td>
-            <td class="desc-label" *ngIf="element.hasUrl">
-              Soil Profile
-            </td>
-            <td class="desc-content" *ngIf="element.hasUrl">
-              
-                <a target="new" href={{element.url}} >View Soil Profile</a>
-              
-            </td>
-
-          </tr>
-          <tr>
-            <td class="desc-label">
-              Remarks
-            </td>
-            <td colspan="3" class="desc-content">
-              {{element.remarks}}
-            </td>
-          </tr>
-
-        </table>
-      
       </div>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-      class="example-element-row"
-      [class.example-expanded-row]="expandedElement === element"
-      (click)="flyToMarker(element.lat, element.long); expandedElement = expandedElement === element ? null : element">
-  </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-</table>
-
-  <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
-
-</div>
 
 
 
-</div>
+      <div class="mat-elevation-z8">
+        <div style="width: 70%; padding-top: 20px; margin: auto;text-align:center;font-weight:300px;">
+          <span style="font-size:1.5em;">Soil Physical and Chemical Characteristics Database</span><br>
+          <span  style="font-size: 0.9em; font-weight: 300;">Soil samples were sent to the laboratory for physical, chemical, and mineralogical analyses. The results obtained from the lab will be the baseline data that researchers will utilize for their fertilizer application and water and crop management. The same lab results will be utilized as baseline data by crop modelers for their crop model development.
+          </span>
+        </div>
+
+        <div id="tsetsetse" style="width: 40%; padding-top: 20px; margin: auto;">
+          <mat-form-field style="width: 100%;">
+            <input  matInput (keyup)="applyFilter($event.target.value)" placeholder="Type here to search">
+          </mat-form-field>
+        </div>
 
 
 
+      <table  mat-table
+              matSort
+              [dataSource]="dataSource1" multiTemplateDataRows
+            >
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Sampling Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.date | date: 'mediumDate'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="barangay">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+          <td mat-cell *matCellDef="let element"> {{element.barangay}}, {{element.province}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="crop">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Crop </th>
+          <td mat-cell *matCellDef="let element"> {{element.crop}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ph">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> pH </th>
+          <td mat-cell *matCellDef="let element"> {{element.ph}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="om">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Organic Matter (OM) </th>
+          <td mat-cell *matCellDef="let element"> {{element.om}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="n">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nitrogen (N) </th>
+          <td mat-cell *matCellDef="let element"> {{element.n}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="p">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Phosphorus (P) </th>
+          <td mat-cell *matCellDef="let element"> {{element.p}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="k">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Potassium (K) </th>
+          <td mat-cell *matCellDef="let element"> {{element.k}} </td>
+        </ng-container>
+
+
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+
+                        <div class="example-element-detail"
+                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+              <table class="tdesc" style="border:1px solid black;padding: 10px;">
+                <tr>
+                  <td class="desc-label">
+                    Collaborator
+                  </td>
+                  <td class="desc-content">
+                  {{element.collaborator}}
+                  </td>
+                  <td class="desc-label">
+                    Longitude              
+                  </td>
+                  <td class="desc-content">
+                    {{element.long}}
+                  </td>
+                  <td class="desc-label">
+                    Latitude
+                  </td>
+                  <td class="desc-content">
+                    {{element.lat}}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="desc-label">
+                    Barangay/Site              
+                  </td>
+                  <td class="desc-content">
+
+                  {{element.barangay}}
+                  </td>
+
+                  <td class="desc-label">
+                    Municipality
+                  </td>
+                  <td class="desc-content">
+                    {{element.municipality}}
+                  </td>
+
+                  <td class="desc-label">
+                    Province
+                  </td>
+                  <td class="desc-content">
+                    {{element.province}}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="desc-label">
+                    Textual Grade
+                  </td>
+                  <td class="desc-content">
+
+                    {{element.textual_grade}}
+                  </td>
+                  <td class="desc-label" *ngIf="element.hasUrl">
+                    Soil Profile
+                  </td>
+                  <td class="desc-content" *ngIf="element.hasUrl">
+                    
+                      <a target="new" href={{element.url}} >View Soil Profile</a>
+                    
+                  </td>
+
+                </tr>
+                <tr>
+                  <td class="desc-label">
+                    Remarks
+                  </td>
+                  <td colspan="3" class="desc-content">
+                    {{element.remarks}}
+                  </td>
+                </tr>
+
+              </table>
+              </div>
+
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+            class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="flyToMarker(element.lat, element.long); expandedElement = expandedElement === element ? null : element">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+      </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+
+      </div>
 
 
 
+      </div>
+<!-- 
+
+<mat-grid-list cols="3" rowHeight="2:1">
+  <mat-grid-tile>1</mat-grid-tile>
+  <mat-grid-tile>2</mat-grid-tile>
+  <mat-grid-tile>3</mat-grid-tile>
+  <mat-grid-tile>4</mat-grid-tile>
+</mat-grid-list> -->
+
+    <div class="content" 
+          fxLayout="row" 
+          fxLayout.xs="column" 
+          fxFlexFill 
+          id ="footer"
+          >
+          
+        <div fxFlex="33">
+          <div  class="footercolumn">
+
+            <span class="footertitle">About SARAi</span>
+            <p>Project SARAi aims to develop a national crop forecasting and monitoring system for nine priority crops: rice, corn, banana, coconut, coffee, cacao, sugarcane, tomato, and soybean. This project is funded by DOST-PCAARRD.</p>
+            <span><img src="./assets/dost-pcaarrd-uplb.png" style="width: 110px;"></span>
+            <p>© 2017-2021 - Project SARAi</p>
+          </div>
+        </div>
+        <div fxFlex="33">
+          <div  class="footercolumn">
+
+            <div class="footertitle">Connect With Us</div>
+            <div class="footer-contact-line">
+              <div class="footer-contact-icon">
+                  <i class="material-icons">call</i>
+                </div>
+                <span>
+                  +63 (049) 536 2302,+63 (049) 536 2836
+                </span>
+              </div>
+
+              <div class="footer-contact-line">
+                <div class="footer-contact-icon">
+                  <i class="material-icons">email</i>
+                </div>
+                <span>
+                  project.sarai.uplb@gmail.com
+                </span>
+              </div>
+
+              <div class="footer-contact-line">
+                <div class="footer-contact-icon">
+                  <i class="material-icons">location_on</i>
+                </div>
+                <span>
+                  SESAM UPLB, College, Laguna Philippines 4031
+                </span>
+              </div>
 
 
+          </div>
+        </div>
+        <div fxFlex="33">
+          <div  class="footercolumn">
 
-
-
-
-
-
+            <span class="footertitle">About SARAi</span>
+            <p>Project SARAi aims to develop a national crop forecasting and monitoring system for nine priority crops: rice, corn, banana, coconut, coffee, cacao, sugarcane, tomato, and soybean. This project is funded by DOST-PCAARRD.</p>
+          </div>
+        </div>
+        
+    </div>
 
 
     </mat-sidenav-content>

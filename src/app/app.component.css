@@ -231,11 +231,44 @@ tr.example-element-row:not(.example-expanded-row):active {
   padding-right: 5px;
 }
 
-#tdesc tr{
+.tdesc tr{
   border: 1px solid black;
   padding: 5px;
 }
 
 #cropselect{
   min-width: 0px;
+}
+
+#footer{
+  text-align: left;
+  background: #444444;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+
+}
+
+.footertitle{
+  font-size: 24px;
+  font-weight: 900px;
+  margin-bottom: 20px;
+}
+
+.footercolumn{
+  padding: 20px;
+}
+
+.footer-contact-icon{
+    float: left;
+    margin-top: -11px;
+    width: 40px;
+    height: 40px;
+    border-radius: 250px;
+    color: #fff;
+    line-height: 55px;
+    text-align: center;
+}
+
+.footer-contact-line {
+    margin-bottom: 15px;
 }
