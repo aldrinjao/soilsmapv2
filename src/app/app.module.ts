@@ -50,10 +50,18 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { Ng5SliderModule } from 'ng5-slider';
+import { BottomSheetOverviewExampleSheet } from './app.component';
 
+import { app } from 'firebase';
 @NgModule({
+  entryComponents: [
+    BottomSheetOverviewExampleSheet
+    ],
+
   declarations: [
-    AppComponent
+    AppComponent,
+    BottomSheetOverviewExampleSheet
   ],
   exports: [],
   imports: [
@@ -103,7 +111,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatTooltipModule,
     MatTreeModule,
     DragDropModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    Ng5SliderModule
 
   ],
   providers: [],

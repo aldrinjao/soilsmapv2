@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
 import { Map, latLng, tileLayer, marker, LayerGroup, control } from 'leaflet';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
@@ -9,6 +9,11 @@ import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SoilIcons } from './markers';
 import * as XLSX from 'xlsx';
+import { Options } from 'ng5-slider';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material';
+
+
+
 
 
 // const html2maker = new html2PDF();
@@ -17,6 +22,7 @@ export interface SoilSample {
   id: number;
   crop: string;
   ph: string;
+  phValue: number;
   om: string;
   n: string;
   p: string;
@@ -52,7 +58,21 @@ export interface SoilSample {
 
 export class AppComponent {
 
+
+  value = 0;
+  highValue = 10;
+  slideroptions: Options = {
+    floor: 0,
+    ceil: 10,
+    showSelectionBar: true,
+    selectionBarGradient: {
+      from: 'red',
+      to: 'blue'
+    }
+  };
+
   displayedColumns: string[] = [
+    'expand',
     'date',
     'barangay',
     'crop',
@@ -96,6 +116,10 @@ export class AppComponent {
     'Cebu',
     'Bukidnon', 'Iloilo'
   ];
+
+
+
+
 
   siteFilter = [];
   cropFilter = [];
@@ -149,7 +173,7 @@ export class AppComponent {
   @ViewChild('sampleTable') nativetable: ElementRef;
 
 
-  constructor(db: AngularFireDatabase) {
+  constructor(db: AngularFireDatabase, private bottomSheet: MatBottomSheet) {
 
     this.items = db.list('items').valueChanges();
 
@@ -167,6 +191,7 @@ export class AppComponent {
             id: sample.id,
             crop: sample.crop,
             ph: sample.ph,
+            phValue: sample.ph_value,
             om: sample.om,
             n: sample.n,
             p: sample.p,
@@ -235,7 +260,7 @@ export class AppComponent {
 
 
       if (samplepoint.hasUrl === true) {
-        popupContent = popupContent + '<br>Soil Profile: <a target = "new" href="' + samplepoint.url + '">View Soil Profile</a>'
+        popupContent = popupContent + '<br>Soil Profile: <a target = "new" href="' + samplepoint.url + '">View Soil Profile</a>';
       }
 
       tempMarker.bindPopup(popupContent);
@@ -268,6 +293,9 @@ export class AppComponent {
 
   filterSelection() {
 
+    console.log(this.value);
+    console.log(this.highValue);
+
     let cropres = [];
     let siteres = [];
 
@@ -275,6 +303,7 @@ export class AppComponent {
       cropres = this.SOIL_DATA.filter(
         f => this.crops.value.includes(f.crop)
       );
+
       if (this.crops.value.length === 0) {
         cropres = this.SOIL_DATA;
       }
@@ -282,8 +311,6 @@ export class AppComponent {
     } else {
       cropres = this.SOIL_DATA;
     }
-
-
 
     if (this.sites.value != null) {
 
@@ -300,12 +327,31 @@ export class AppComponent {
     }
 
 
-    const res = cropres.filter(v => { // iterate over the array
+    // Create new array
+
+    // filter array for numbers in a range
+    const phRange = this.SOIL_DATA.filter(f => {
+
+      return (f.phValue >= this.value && f.phValue <= this.highValue);
+    });
+
+    // display new filtered array
+    console.log(phRange);
+
+
+
+    let res = cropres.filter(v => { // iterate over the array
       // check sample present in the second array
       return siteres.indexOf(v) > -1;
       // or array2.includes(v)
     });
 
+
+    res = res.filter(v => { // iterate over the array
+      // check sample present in the second array
+      return phRange.indexOf(v) > -1;
+      // or array2.includes(v)
+    });
     // make the markers
     this.itemsLevel1.clearLayers();
     this.dataSource1 = new MatTableDataSource(res);
@@ -341,5 +387,24 @@ export class AppComponent {
     });
   }
 
+  openBottomSheet(): void {
+    this.bottomSheet.open(BottomSheetOverviewExampleSheet);
+  }
 
+
+}
+
+
+@Component({
+  selector: 'bottom-sheet-overview-example-sheet',
+  templateUrl: 'bottom-sheet-overview-example-sheet.html',
+  styleUrls: ['./app.component.css'],
+})
+export class BottomSheetOverviewExampleSheet {
+  constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>) { }
+
+  openLink(event: MouseEvent): void {
+    this.bottomSheetRef.dismiss();
+    event.preventDefault();
+  }
 }
