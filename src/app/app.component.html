@@ -143,15 +143,15 @@
             <input  matInput (keyup)="applyFilter($event.target.value)" placeholder="Type here to search">
           </mat-form-field>
         <div style="width: 100%;text-align:center;padding: 10px 0px;">
-          <button mat-button (click)="openBottomSheet()">Value References & Ranges</button>
+          <button  style="background: rgb(245,245,245);" mat-button (click)="openBottomSheet()">Value References & Ranges <i class="material-icons">info</i></button>
         </div>
         </div>
-
-
 
       <table  mat-table
               matSort
-              [dataSource]="dataSource1" multiTemplateDataRows
+              [dataSource]="dataSource1" 
+              multiTemplateDataRows
+              id ="soilstable"
             >
         <th></th>
 
@@ -315,7 +315,13 @@
 
         <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
         <div style="width: 100%;text-align:center;padding-bottom: 20px;">
-          <a href="http://bit.ly/SaraiSoils" target="new">Download All Soils Data</a>
+          
+          <a href="http://bit.ly/SaraiSoils" target="new">
+            <button  style="background: rgb(245,245,245);line-height: 0px;" mat-button>
+              <i class="material-icons">cloud_download</i>
+              Download All Soils Data
+              </button>
+          </a>
         </div>
 
       </div>
