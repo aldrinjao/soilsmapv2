@@ -11,6 +11,7 @@ import { SoilIcons } from './markers';
 import * as XLSX from 'xlsx';
 import { Options } from 'ng5-slider';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 
@@ -25,6 +26,10 @@ export interface SoilSample {
   phValue: number;
   om: string;
   n: string;
+  nValue: number;
+  pValue: number;
+  kValue: number;
+  omValue: number;
   p: string;
   p_analysis: string;
   k: string;
@@ -59,8 +64,8 @@ export interface SoilSample {
 export class AppComponent {
 
 
-  value = 0;
-  highValue = 10;
+  phLowValue = 0;
+  phHighValue = 10;
   slideroptions: Options = {
     floor: 0,
     ceil: 10,
@@ -194,9 +199,13 @@ export class AppComponent {
             phValue: sample.ph_value,
             om: sample.om,
             n: sample.n,
+            nValue: sample.n_value,
             p: sample.p,
+            pValue: sample.p_value,
             p_analysis: sample.p_analysis,
             k: sample.k,
+            kValue: sample.k_value,
+            omValue: sample.om_value,
             textual_grade: sample.textual_grade,
             remarks: sample.remarks,
             collaborator: sample.collaborator,
@@ -293,8 +302,6 @@ export class AppComponent {
 
   filterSelection() {
 
-    console.log(this.value);
-    console.log(this.highValue);
 
     let cropres = [];
     let siteres = [];
@@ -332,7 +339,7 @@ export class AppComponent {
     // filter array for numbers in a range
     const phRange = this.SOIL_DATA.filter(f => {
 
-      return (f.phValue >= this.value && f.phValue <= this.highValue);
+      return (f.phValue >= this.phLowValue && f.phValue <= this.phHighValue);
     });
 
     // display new filtered array
@@ -391,6 +398,19 @@ export class AppComponent {
     this.bottomSheet.open(BottomSheetOverviewExampleSheet);
   }
 
+  resetSelection(): void {
+    this.dataSource1 = new MatTableDataSource(this.SOIL_DATA);
+    this.createMarkers(this.SOIL_DATA);
+    this.dataSource1.paginator = this.paginator;
+    this.dataSource1.sort = this.sort;
+
+
+    this.crops.setValue(null);
+    this.sites.setValue(null);
+    this.phLowValue = 0;
+    this.phHighValue = 10;
+
+  }
 
 }
 

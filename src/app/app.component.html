@@ -108,13 +108,14 @@
           </div>
           <div style="width:80%;margin: auto;" class="custom-slider">
             
-            <ng5-slider [(value)]="value" [(highValue)]="highValue" [options]="slideroptions"></ng5-slider>          
+            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions"></ng5-slider>          
         
           </div>
 
 
  
         <button (click)="filterSelection()">Filter</button>
+        <button style="margin-left:10px;" (click)="resetSelection()">Reset Filter</button>
 
 
           </div>
@@ -262,6 +263,28 @@
 
                 <tr>
                   <td class="desc-label">
+                    Nitrogen
+                  </td>
+                  <td class="desc-content">
+                    {{element.nValue}} ({{element.n}})
+                  </td>
+                  <td class="desc-label">
+                    Phosphorus
+                  </td>
+                  <td class="desc-content">
+                    {{element.pValue}} ({{element.p}})
+                  </td>
+                  <td class="desc-label">
+                    Potassium
+                  </td>
+                  <td class="desc-content">
+                    {{element.kValue}} ({{element.k}})
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td class="desc-label">
                     Textual Grade
                   </td>
                   <td class="desc-content">
@@ -273,21 +296,20 @@
                     ph Value
                   </td>
                   <td class="desc-content">
-                    {{element.phValue}}
+                    {{element.phValue}} ({{element.ph}})
                    
 
                   </td>
 
-                  <td class="desc-label" *ngIf="element.hasUrl">
-                    Soil Profile
+                  <td class="desc-label">
+                    Organic Matter
                   </td>
-                  <td class="desc-content" *ngIf="element.hasUrl">
-                    
-                      <a target="new" href={{element.url}} >View Soil Profile</a>
-                    
+                  <td class="desc-content">
+                    {{element.omValue}} ({{element.om}})
                   </td>
 
                 </tr>
+
                 <tr>
                   <td class="desc-label">
                     Remarks
@@ -317,10 +339,9 @@
         <div style="width: 100%;text-align:center;padding-bottom: 20px;">
           
           <a href="http://bit.ly/SaraiSoils" target="new">
-            <button  style="background: rgb(245,245,245);line-height: 0px;" mat-button>
-              <i class="material-icons">cloud_download</i>
-              Download All Soils Data
-              </button>
+
+            <button  style="background: rgb(245,245,245); color: black;" mat-button>Download All Soils Data <i class="material-icons">cloud_download</i></button>
+
           </a>
         </div>
 
