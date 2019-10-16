@@ -350,3 +350,12 @@ tableaa{
   50% { fill: #21c7ed; filter: drop-shadow( 0 0 15px #21c7ed); }
   100% { fill: #0091b2; filter: drop-shadow( 0 0 3px #0091b2); }
 }
+
+.mapscroll:hover {
+   cursor: pointer;
+
+}
+
+::ng-deep .mat-select-panel {
+  max-height: 80vh !important;
+}

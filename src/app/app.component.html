@@ -103,10 +103,10 @@
           </mat-form-field>
           
           
-          <div style="text-align: left; width: 90%;margin:auto;color: rgba(0,0,0,.54);font-size: 1.4em;">
+          <div style="text-align: left; width: 90%;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
           pH Level
           </div>
-          <div style="width:80%;margin: auto;" class="custom-slider">
+          <div style="width:80%;margin: auto;font-size: 1em;" class="custom-slider">
             
             <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions"></ng5-slider>          
         
@@ -211,115 +211,123 @@
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
         <ng-container matColumnDef="expandedDetail">
           <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-
-                        <div class="example-element-detail"
+              <div class="example-element-detail"
                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <div style="width: 100%;">
 
-              <table class="tdesc" style="border:1px solid black;padding: 10px;">
-                <tr>
+                <div style="width:  100%;text-align:right;">
+                <a class="mapscroll" (click) = "scrollToMap()">
+                  <i class="material-icons" style="padding-right: 30px;">
+                    pageview
+                  </i>
+                </a>
+                </div>
+                <table class="tdesc" style="border:1px solid black;padding: 10px;">
+                  <tr>
+                    <td class="desc-label">
+                      Collaborator
+                    </td>
+                    <td class="desc-content">
+                    {{element.collaborator}}
+                    </td>
+                    <td class="desc-label">
+                      Longitude              
+                    </td>
+                    <td class="desc-content">
+                      {{element.long}}
+                    </td>
+                    <td class="desc-label">
+                      Latitude
+                    </td>
+                    <td class="desc-content">
+                      {{element.lat}}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="desc-label">
+                      Barangay/Site              
+                    </td>
+                    <td class="desc-content">
+
+                    {{element.barangay}}
+                    </td>
+
+                    <td class="desc-label">
+                      Municipality
+                    </td>
+                    <td class="desc-content">
+                      {{element.municipality}}
+                    </td>
+
+                    <td class="desc-label">
+                      Province
+                    </td>
+                    <td class="desc-content">
+                      {{element.province}}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="desc-label">
+                      Nitrogen
+                    </td>
+                    <td class="desc-content">
+                      {{element.nValue}} ({{element.n}})
+                    </td>
+                    <td class="desc-label">
+                      Phosphorus
+                    </td>
+                    <td class="desc-content">
+                      {{element.pValue}} ({{element.p}})
+                    </td>
+                    <td class="desc-label">
+                      Potassium
+                    </td>
+                    <td class="desc-content">
+                      {{element.kValue}} ({{element.k}})
+                    </td>
+
+                  </tr>
+
+                  <tr>
+                    <td class="desc-label">
+                      Textual Grade
+                    </td>
+                    <td class="desc-content">
+
+                      {{element.textual_grade}}
+                    </td>
                   <td class="desc-label">
-                    Collaborator
-                  </td>
-                  <td class="desc-content">
-                  {{element.collaborator}}
-                  </td>
-                  <td class="desc-label">
-                    Longitude              
-                  </td>
-                  <td class="desc-content">
-                    {{element.long}}
-                  </td>
-                  <td class="desc-label">
-                    Latitude
-                  </td>
-                  <td class="desc-content">
-                    {{element.lat}}
-                  </td>
-                </tr>
 
-                <tr>
-                  <td class="desc-label">
-                    Barangay/Site              
-                  </td>
-                  <td class="desc-content">
+                      ph Value
+                    </td>
+                    <td class="desc-content">
+                      {{element.phValue}} ({{element.ph}})
+                    
 
-                  {{element.barangay}}
-                  </td>
+                    </td>
 
-                  <td class="desc-label">
-                    Municipality
-                  </td>
-                  <td class="desc-content">
-                    {{element.municipality}}
-                  </td>
+                    <td class="desc-label">
+                      Organic Matter
+                    </td>
+                    <td class="desc-content">
+                      {{element.omValue}} ({{element.om}})
+                    </td>
 
-                  <td class="desc-label">
-                    Province
-                  </td>
-                  <td class="desc-content">
-                    {{element.province}}
-                  </td>
-                </tr>
+                  </tr>
 
-                <tr>
-                  <td class="desc-label">
-                    Nitrogen
-                  </td>
-                  <td class="desc-content">
-                    {{element.nValue}} ({{element.n}})
-                  </td>
-                  <td class="desc-label">
-                    Phosphorus
-                  </td>
-                  <td class="desc-content">
-                    {{element.pValue}} ({{element.p}})
-                  </td>
-                  <td class="desc-label">
-                    Potassium
-                  </td>
-                  <td class="desc-content">
-                    {{element.kValue}} ({{element.k}})
-                  </td>
+                  <tr>
+                    <td class="desc-label">
+                      Remarks
+                    </td>
+                    <td colspan="3" class="desc-content">
+                      {{element.remarks}}
+                    </td>
+                  </tr>
 
-                </tr>
-
-                <tr>
-                  <td class="desc-label">
-                    Textual Grade
-                  </td>
-                  <td class="desc-content">
-
-                    {{element.textual_grade}}
-                  </td>
-                 <td class="desc-label">
-
-                    ph Value
-                  </td>
-                  <td class="desc-content">
-                    {{element.phValue}} ({{element.ph}})
-                   
-
-                  </td>
-
-                  <td class="desc-label">
-                    Organic Matter
-                  </td>
-                  <td class="desc-content">
-                    {{element.omValue}} ({{element.om}})
-                  </td>
-
-                </tr>
-
-                <tr>
-                  <td class="desc-label">
-                    Remarks
-                  </td>
-                  <td colspan="3" class="desc-content">
-                    {{element.remarks}}
-                  </td>
-                </tr>
-
-              </table>
+                </table>
+                </div>            
               </div>
 
 

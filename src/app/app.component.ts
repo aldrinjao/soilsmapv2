@@ -409,7 +409,10 @@ export class AppComponent {
     this.sites.setValue(null);
     this.phLowValue = 0;
     this.phHighValue = 10;
+  }
 
+  scrollToMap(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 }
