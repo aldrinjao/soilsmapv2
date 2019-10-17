@@ -325,7 +325,15 @@
                       {{element.remarks}}
                     </td>
                   </tr>
-
+                  <tr  *ngIf="element.hasUrl">
+                    <td class="desc-label">
+                    Soil Profile
+                    </td>
+                    <td class="desc-content">
+                      <a target="new" href={{element.url}} >View Soil Profile</a>
+                    </td>
+                  
+                  </tr>
                 </table>
                 </div>            
               </div>
