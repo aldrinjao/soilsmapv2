@@ -1,56 +1,53 @@
+<div class="container">
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <div fxShow="true" fxHide.gt-sm="true">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
 
-
-<div class="container"> 
-<mat-toolbar>
-  <mat-toolbar-row>
-    <div fxShow="true" fxHide.gt-sm="true">
-      <button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </div>
-
-    <a href="./">
-      <span>
-        <img src="./assets/header_green.png" style="width: 300px;">
-      </span>
-    </a>
-    
-    <span class="filter-spacer"></span>
-
-    <div  fxShow="true" fxHide.lt-md="true">
-      
-      <span>
-        <button mat-button>About Us</button>
-
-        <button mat-button>SARAi Community</button>
-
-        <button mat-button [matMenuTriggerFor]="beforeMenu">Crops</button>
-        <mat-menu #beforeMenu="matMenu" xPosition="before">
-          <button mat-menu-item>Item 1</button>
-          <button mat-menu-item>Item 2</button>
-        </mat-menu>
-
-        <button mat-button [matMenuTriggerFor]="beforeMenu">Maps</button>
-        <mat-menu #beforeMenu="matMenu" xPosition="before">
-          <button mat-menu-item>Item 1</button>
-          <button mat-menu-item>Item 2</button>
-        </mat-menu>
-
-        <button mat-button [matMenuTriggerFor]="afterMenu">Services</button>
-        <mat-menu #afterMenu="matMenu" xPosition="after">
-          <button mat-menu-item>Item 1</button>
-          <button mat-menu-item>Item 2</button>
-        </mat-menu>
+      <a href="./">
+        <span>
+          <img src="./assets/header_green.png" style="width: 300px;">
         </span>
-    </div>
-    <span><img src="./assets/dost-pcaarrd-uplb.png" style="width: 110px;"></span>
- 
-  </mat-toolbar-row>
-</mat-toolbar>
+      </a>
+
+      <span class="filter-spacer"></span>
+
+      <div fxShow="true" fxHide.lt-md="true">
+
+        <span>
+          <button mat-button>About Us</button>
+
+
+          <button mat-button [matMenuTriggerFor]="beforeMenu">Crops</button>
+          <mat-menu #beforeMenu="matMenu" xPosition="before">
+            <button mat-menu-item>Item 1</button>
+            <button mat-menu-item>Item 2</button>
+          </mat-menu>
+
+          <button mat-button [matMenuTriggerFor]="beforeMenu">Maps</button>
+          <mat-menu #beforeMenu="matMenu" xPosition="before">
+            <button mat-menu-item>Item 1</button>
+            <button mat-menu-item>Item 2</button>
+          </mat-menu>
+
+          <button mat-button [matMenuTriggerFor]="afterMenu">Services</button>
+          <mat-menu #afterMenu="matMenu" xPosition="after">
+            <button mat-menu-item>Item 1</button>
+            <button mat-menu-item>Item 2</button>
+          </mat-menu>
+        </span>
+      </div>
+      <span><img src="./assets/dost-pcaarrd-uplb.png" style="width: 110px;"></span>
+
+    </mat-toolbar-row>
+  </mat-toolbar>
 
   <mat-sidenav-container fxFlexFill class="example-container">
 
-    <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over"  opened="false" fxHide.gt-sm="true">
+    <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over" opened="false" fxHide.gt-sm="true">
       <div fxLayout="column">
         <a mat-button routerLink="/about-us">About us</a>
         <a mat-button routerLink="/prices">SARAi Community</a>
@@ -65,308 +62,486 @@
 
       <div>
 
-      <div id="boundary" style="background: red;">
+        <div id="boundary" style="background: red;">
 
-        <div  class="map"
-              leaflet
-              [leafletOptions]="options"
-              (leafletMapReady)="onMapReady($event)"
-              >
+          <div class="map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
 
-        <div class="filter-box" cdkDrag cdkDragBoundary='#boundary' (mouseenter) ="mouseEnter()" (mouseleave)="mouseLeave()">
+            <div #filterboxid class="filter-box" cdkDrag cdkDragBoundary='#boundary' (mouseenter)="mouseEnter()"
+              (mouseleave)="mouseLeave()">
 
-          <div class="hide-button">
+
+
+
+
+              <div class="filter-forms">
+
+                <mat-tab-group id="filter-tab" (selectedTabChange)="tabClick($event)"
+                  [selectedIndex]='selectedTab.value'>
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      <mat-icon class="example-tab-icon" matTooltip="Filter">search</mat-icon>
+
+                    </ng-template>
+
+                    <div class="filter-handle">
+                      <span>SARAi Soil Profiling & Characterization</span>
+                    </div>
+
+
+                    <mat-form-field class="filter-control">
+                      <mat-label>by crop</mat-label>
+                      <mat-select [formControl]="crops" multiple id="cropselect">
+                        <mat-option *ngFor="let crop of cropList" [value]="crop" checked>{{crop}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+
+                    <mat-form-field class="filter-control">
+
+                      <mat-label>by province</mat-label>
+                      <mat-select [formControl]="sites" multiple>
+                        <mat-option *ngFor="let site of siteList" [value]="site" checked>{{site}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+
+                    <mat-form-field class="filter-control">
+
+                      <mat-label>from</mat-label>
+
+                      <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+
+
+
+                    </mat-form-field>
+
+
+                    <mat-form-field class="filter-control">
+
+                      <mat-label>to</mat-label>
+
+                      <input matInput [matDatepicker]="topicker" placeholder="Choose a date">
+                      <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
+                      <mat-datepicker #topicker></mat-datepicker>
+
+
+                    </mat-form-field>
+
+
+
+                    <!-- 
+              <div style="text-align: left; width: 90%;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
+              pH Level
+              </div>
+              <div style="width:80%;margin: auto;font-size: 1em;" class="custom-slider">
+                
+                <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions"></ng5-slider>          
             
-            
-          </div>
-          
-          <div class="filter-handle" cdkDragHandle>
-            <span>Soil Profiling and Characterization</span>
-          </div>
-        
-          <div class="filter-forms" style="width: 100%;height:100%;">
+              </div> -->
 
-         
-          <mat-form-field class="filter-control" >
-            <mat-label>Filter by crop</mat-label>
-            <mat-select [formControl]="crops" multiple id="cropselect">
-              <mat-option *ngFor="let crop of cropList" [value]="crop" checked>{{crop}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+                  </mat-tab>
+                  <mat-tab>
 
+                    <ng-template mat-tab-label>
+                      <mat-icon class="example-tab-icon" matTooltip="Filter by values">settings_applications</mat-icon>
 
-          <mat-form-field class="filter-control">
-            <mat-label>Filter by province</mat-label>
-            <mat-select [formControl]="sites" multiple>
-              <mat-option *ngFor="let site of siteList" [value]="site" checked>{{site}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-          
-          <div style="text-align: left; width: 90%;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
-          pH Level
-          </div>
-          <div style="width:80%;margin: auto;font-size: 1em;" class="custom-slider">
-            
-            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions"></ng5-slider>          
-        
-          </div>
-
-
- 
-        <button (click)="filterSelection()">Filter</button>
-        <button style="margin-left:10px;" (click)="resetSelection()">Reset Filter</button>
-
-
-          </div>
-        
-        
-        
-        </div>
-        </div>
+                    </ng-template>
 
 
 
 
-      </div>
+                    <table style="width: 90%;margin:auto;">
+                      <tr>
+                        <td style="width: 30px;">
+                          <div style="text-align: center;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
+                            pH
+                          </div>
+
+                        </td>
+                        <td>
+                          <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
+
+                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            </ng5-slider>
+
+                          </div>
+
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td>
+                          <div style="text-align: center;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
+                            N
+                          </div>
+
+                        </td>
+                        <td>
+                          <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
+
+                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            </ng5-slider>
+
+                          </div>
+
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td>
+                          <div style="text-align: center;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
+                            P
+                          </div>
+
+                        </td>
+                        <td>
+                          <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
+
+                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            </ng5-slider>
+
+                          </div>
+
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td>
+                          <div style="text-align: center;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
+                            K
+                          </div>
+
+                        </td>
+                        <td>
+                          <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
+
+                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            </ng5-slider>
+
+                          </div>
+
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td>
+                          <div style="text-align: center;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
+                            OM
+                          </div>
+
+                        </td>
+                        <td>
+                          <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
+
+                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            </ng5-slider>
+
+                          </div>
+
+                        </td>
+
+                      </tr>
+                    </table>
 
 
 
-      <div class="mat-elevation-z8">
-        <div style="width: 70%; padding-top: 20px; margin: auto;text-align:center;font-weight:300px;">
-          <span style="font-size:1.5em;">Soil Physical and Chemical Characteristics Database</span><br>
-          <span  style="font-size: 0.9em; font-weight: 300;">Soil samples were sent to the laboratory for physical, chemical, and mineralogical analyses. The results obtained from the lab will be the baseline data that researchers will utilize for their fertilizer application and water and crop management. The same lab results will be utilized as baseline data by crop modelers for their crop model development.
-          </span>
-        </div>
-
-        <div id="tsetsetse" style="width: 40%; padding-top: 20px; margin: auto;">
-          <mat-form-field style="width: 100%;">
-            <input  matInput (keyup)="applyFilter($event.target.value)" placeholder="Type here to search">
-          </mat-form-field>
-        <div style="width: 100%;text-align:center;padding: 10px 0px;">
-          <button  style="background: rgb(245,245,245);" mat-button (click)="openBottomSheet()">Value References & Ranges <i class="material-icons">info</i></button>
-        </div>
-        </div>
-
-      <table  mat-table
-              matSort
-              [dataSource]="dataSource1" 
-              multiTemplateDataRows
-              id ="soilstable"
-            >
-        <th></th>
-
-        <ng-container matColumnDef="expand">
-          <th mat-header-cell *matHeaderCellDef>  </th>
-          <td mat-cell *matCellDef="let element"> 
-            
-            <i class="material-icons">
-              expand_more
-            </i>
-             </td>
-        </ng-container>
 
 
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Sampling Date </th>
-          <td mat-cell *matCellDef="let element"> {{element.date | date: 'mediumDate'}} </td>
-        </ng-container>
 
-        <ng-container matColumnDef="barangay">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
-          <td mat-cell *matCellDef="let element"> {{element.barangay}}, {{element.province}} </td>
-        </ng-container>
+                  </mat-tab>
+                  <mat-tab>
 
-        <ng-container matColumnDef="crop">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Crop </th>
-          <td mat-cell *matCellDef="let element"> {{element.crop}} </td>
-        </ng-container>
+                    <ng-template mat-tab-label>
+                      <mat-icon class="example-tab-icon" matTooltip="Info">info</mat-icon>
 
-        <ng-container matColumnDef="ph">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> pH </th>
-          <td mat-cell *matCellDef="let element"> {{element.ph}} </td>
-        </ng-container>
+                    </ng-template>
+                    <span style="font-size: 1.5em;text-align: justify;">
+                      SARAi Project 2.5: <br>Soil Sampling and Characterization
+                    </span>
+                    <br>
+                    Project Leader: Prof. Victorino A. Bato
+                    <br>
+                    <a href="http://sarai.ph/about-us/2.5" target="new">Read more</a>
 
-        <ng-container matColumnDef="om">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Organic Matter (OM) </th>
-          <td mat-cell *matCellDef="let element"> {{element.om}} </td>
-        </ng-container>
+                  </mat-tab>
 
-        <ng-container matColumnDef="n">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nitrogen (N) </th>
-          <td mat-cell *matCellDef="let element"> {{element.n}} </td>
-        </ng-container>
+                  <mat-tab>
 
-        <ng-container matColumnDef="p">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Phosphorus (P) </th>
-          <td mat-cell *matCellDef="let element"> {{element.p}} </td>
-        </ng-container>
+                    <ng-template mat-tab-label>
+                      <mat-icon class="example-tab-icon" matTooltip="Hide">keyboard_arrow_left</mat-icon>
 
-        <ng-container matColumnDef="k">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Potassium (K) </th>
-          <td mat-cell *matCellDef="let element"> {{element.k}} </td>
-        </ng-container>
+                    </ng-template>
 
 
-        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-        <ng-container matColumnDef="expandedDetail">
-          <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-              <div class="example-element-detail"
-                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                <div style="width: 100%;">
 
-                <div style="width:  100%;text-align:right;">
-                <a class="mapscroll" (click) = "scrollToMap()">
-                  <i class="material-icons" style="padding-right: 30px;">
-                    pageview
-                  </i>
-                </a>
+                  </mat-tab>
+
+
+                </mat-tab-group>
+
+
+                <div style="position:absolute;bottom: 10px;width: 100%;">
+                  <button (click)="filterSelection()">Filter</button>
+                  <button style="margin-left:10px;" (click)="resetSelection()">Reset Filter</button>
                 </div>
-                <table class="tdesc" style="border:1px solid black;padding: 10px;">
-                  <tr>
-                    <td class="desc-label">
-                      Collaborator
-                    </td>
-                    <td class="desc-content">
-                    {{element.collaborator}}
-                    </td>
-                    <td class="desc-label">
-                      Longitude              
-                    </td>
-                    <td class="desc-content">
-                      {{element.long}}
-                    </td>
-                    <td class="desc-label">
-                      Latitude
-                    </td>
-                    <td class="desc-content">
-                      {{element.lat}}
-                    </td>
-                  </tr>
 
-                  <tr>
-                    <td class="desc-label">
-                      Barangay/Site              
-                    </td>
-                    <td class="desc-content">
 
-                    {{element.barangay}}
-                    </td>
-
-                    <td class="desc-label">
-                      Municipality
-                    </td>
-                    <td class="desc-content">
-                      {{element.municipality}}
-                    </td>
-
-                    <td class="desc-label">
-                      Province
-                    </td>
-                    <td class="desc-content">
-                      {{element.province}}
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="desc-label">
-                      Nitrogen
-                    </td>
-                    <td class="desc-content">
-                      {{element.nValue}} ({{element.n}})
-                    </td>
-                    <td class="desc-label">
-                      Phosphorus
-                    </td>
-                    <td class="desc-content">
-                      {{element.pValue}} ({{element.p}})
-                    </td>
-                    <td class="desc-label">
-                      Potassium
-                    </td>
-                    <td class="desc-content">
-                      {{element.kValue}} ({{element.k}})
-                    </td>
-
-                  </tr>
-
-                  <tr>
-                    <td class="desc-label">
-                      Textual Grade
-                    </td>
-                    <td class="desc-content">
-
-                      {{element.textual_grade}}
-                    </td>
-                  <td class="desc-label">
-
-                      ph Value
-                    </td>
-                    <td class="desc-content">
-                      {{element.phValue}} ({{element.ph}})
-                    
-
-                    </td>
-
-                    <td class="desc-label">
-                      Organic Matter
-                    </td>
-                    <td class="desc-content">
-                      {{element.omValue}} ({{element.om}})
-                    </td>
-
-                  </tr>
-
-                  <tr>
-                    <td class="desc-label">
-                      Remarks
-                    </td>
-                    <td colspan="3" class="desc-content">
-                      {{element.remarks}}
-                    </td>
-                  </tr>
-                  <tr  *ngIf="element.hasUrl">
-                    <td class="desc-label">
-                    Soil Profile
-                    </td>
-                    <td class="desc-content">
-                      <a target="new" href={{element.url}} >View Soil Profile</a>
-                    </td>
-                  
-                  </tr>
-                </table>
-                </div>            
               </div>
 
 
-          </td>
-        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-            class="example-element-row"
-            [class.example-expanded-row]="expandedElement === element"
-            (click)="flyToMarker(element.lat, element.long); expandedElement = expandedElement === element ? null : element">
-        </tr>
-        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-      </table>
+            </div>
+            <div #filterboxshow class="filterboxhideclass hidemenu" (click)='showmenu()'>
+              <mat-icon style="font-size:3em;" class="example-tab-icon" matTooltip="Show">keyboard_arrow_right
+              </mat-icon>
 
-        <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
-        <div style="width: 100%;text-align:center;padding-bottom: 20px;">
-          
-          <a href="http://bit.ly/SaraiSoils" target="new">
 
-            <button  style="background: rgb(245,245,245); color: black;" mat-button>Download All Soils Data <i class="material-icons">cloud_download</i></button>
+            </div>
+          </div>
 
-          </a>
+
+
+
         </div>
 
-      </div>
+
+
+        <div class="mat-elevation-z8">
+          <div style="width: 70%; padding-top: 20px; margin: auto;text-align:center;font-weight:300px;">
+            <span style="font-size:1.5em;">Soil Physical and Chemical Characteristics Database</span><br>
+            <span style="font-size: 0.9em; font-weight: 300;">Soil samples were sent to the laboratory for physical,
+              chemical, and mineralogical analyses. The results obtained from the lab will be the baseline data that
+              researchers will utilize for their fertilizer application and water and crop management. The same lab
+              results will be utilized as baseline data by crop modelers for their crop model development.
+            </span>
+          </div>
+
+          <div id="tsetsetse" style="width: 40%; padding-top: 20px; margin: auto;">
+            <mat-form-field style="width: 100%;">
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type here to search">
+            </mat-form-field>
+            <div style="width: 100%;text-align:center;padding: 10px 0px;">
+              <button style="background: rgb(245,245,245);" mat-button (click)="openBottomSheet()">Value References &
+                Ranges <i class="material-icons">info</i></button>
+            </div>
+          </div>
+
+          <table mat-table matSort [dataSource]="dataSource1" multiTemplateDataRows id="soilstable">
+            <th></th>
+
+            <ng-container matColumnDef="expand">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let element">
+
+                <i class="material-icons">
+                  expand_more
+                </i>
+              </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Sampling Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.date | date: 'mediumDate'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="barangay">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+              <td mat-cell *matCellDef="let element"> {{element.barangay}}, {{element.province}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="crop">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Crop </th>
+              <td mat-cell *matCellDef="let element"> {{element.crop}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ph">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> pH </th>
+              <td mat-cell *matCellDef="let element"> {{element.ph}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="om">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Organic Matter (OM) </th>
+              <td mat-cell *matCellDef="let element"> {{element.om}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="n">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Nitrogen (N) </th>
+              <td mat-cell *matCellDef="let element"> {{element.n}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="p">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Phosphorus (P) </th>
+              <td mat-cell *matCellDef="let element"> {{element.p}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="k">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Potassium (K) </th>
+              <td mat-cell *matCellDef="let element"> {{element.k}} </td>
+            </ng-container>
+
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                <div class="example-element-detail"
+                  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                  <div style="width: 100%;">
+
+                    <div style="width:  100%;text-align:right;">
+                      <a class="mapscroll" (click)="scrollToMap()">
+                        <i class="material-icons" style="padding-right: 30px;">
+                          pageview
+                        </i>
+                      </a>
+                    </div>
+                    <table class="tdesc" style="border:1px solid black;padding: 10px;">
+                      <tr>
+                        <td class="desc-label">
+                          Collaborator
+                        </td>
+                        <td class="desc-content">
+                          {{element.collaborator}}
+                        </td>
+                        <td class="desc-label">
+                          Longitude
+                        </td>
+                        <td class="desc-content">
+                          {{element.long}}
+                        </td>
+                        <td class="desc-label">
+                          Latitude
+                        </td>
+                        <td class="desc-content">
+                          {{element.lat}}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="desc-label">
+                          Barangay/Site
+                        </td>
+                        <td class="desc-content">
+
+                          {{element.barangay}}
+                        </td>
+
+                        <td class="desc-label">
+                          Municipality
+                        </td>
+                        <td class="desc-content">
+                          {{element.municipality}}
+                        </td>
+
+                        <td class="desc-label">
+                          Province
+                        </td>
+                        <td class="desc-content">
+                          {{element.province}}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="desc-label">
+                          Nitrogen
+                        </td>
+                        <td class="desc-content">
+                          {{element.nValue}} ({{element.n}})
+                        </td>
+                        <td class="desc-label">
+                          Phosphorus
+                        </td>
+                        <td class="desc-content">
+                          {{element.pValue}} ({{element.p}})
+                        </td>
+                        <td class="desc-label">
+                          Potassium
+                        </td>
+                        <td class="desc-content">
+                          {{element.kValue}} ({{element.k}})
+                        </td>
+
+                      </tr>
+
+                      <tr>
+                        <td class="desc-label">
+                          Textual Grade
+                        </td>
+                        <td class="desc-content">
+
+                          {{element.textual_grade}}
+                        </td>
+                        <td class="desc-label">
+
+                          ph Value
+                        </td>
+                        <td class="desc-content">
+                          {{element.phValue}} ({{element.ph}})
+
+
+                        </td>
+
+                        <td class="desc-label">
+                          Organic Matter
+                        </td>
+                        <td class="desc-content">
+                          {{element.omValue}} ({{element.om}})
+                        </td>
+
+                      </tr>
+
+                      <tr>
+                        <td class="desc-label">
+                          Remarks
+                        </td>
+                        <td colspan="3" class="desc-content">
+                          {{element.remarks}}
+                        </td>
+                      </tr>
+                      <tr *ngIf="element.hasUrl">
+                        <td class="desc-label">
+                          Soil Profile
+                        </td>
+                        <td class="desc-content">
+                          <a target="new" href={{element.url}}>View Soil Profile</a>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+
+
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+              [class.example-expanded-row]="expandedElement === element"
+              (click)="flyToMarker(element.lat, element.long); expandedElement = expandedElement === element ? null : element">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+          <div style="width: 100%;text-align:center;padding-bottom: 20px;">
+
+            <a href="http://bit.ly/SaraiSoils" target="new">
+
+              <button style="background: rgb(245,245,245); color: black;" mat-button>Download All Soils Data <i
+                  class="material-icons">cloud_download</i></button>
+
+            </a>
+          </div>
+
+        </div>
 
 
 
       </div>
-<!-- 
+      <!-- 
 
 <mat-grid-list cols="3" rowHeight="2:1">
   <mat-grid-tile>1</mat-grid-tile>
@@ -375,65 +550,85 @@
   <mat-grid-tile>4</mat-grid-tile>
 </mat-grid-list> -->
 
-    <div class="content" 
-          fxLayout="row" 
-          fxLayout.xs="column" 
-          fxFlexFill 
-          id ="footer"
-          >
-          
+      <div class="content" fxLayout="row" fxLayout.xs="column" fxFlexFill id="footer">
+
         <div fxFlex="33">
-          <div  class="footercolumn">
+          <div class="footercolumn">
 
             <span class="footertitle">About SARAi</span>
-            <p>Project SARAi aims to develop a national crop forecasting and monitoring system for nine priority crops: rice, corn, banana, coconut, coffee, cacao, sugarcane, tomato, and soybean. This project is funded by DOST-PCAARRD.</p>
+            <p>Project SARAi aims to develop a national crop forecasting and monitoring system for nine priority crops:
+              rice, corn, banana, coconut, coffee, cacao, sugarcane, tomato, and soybean. This project is funded by
+              DOST-PCAARRD.</p>
             <span><img src="./assets/dost-pcaarrd-uplb.png" style="width: 110px;"></span>
             <p>© 2017-2021 - Project SARAi</p>
           </div>
         </div>
         <div fxFlex="33">
-          <div  class="footercolumn">
+          <div class="footercolumn">
 
             <div class="footertitle">Connect With Us</div>
             <div class="footer-contact-line">
               <div class="footer-contact-icon">
-                  <i class="material-icons">call</i>
-                </div>
-                <span>
-                  +63 (049) 536 2302,+63 (049) 536 2836
-                </span>
+                <i class="material-icons">call</i>
               </div>
+              <span>
+                +63 (049) 536 2302,+63 (049) 536 2836
+              </span>
+            </div>
 
-              <div class="footer-contact-line">
-                <div class="footer-contact-icon">
-                  <i class="material-icons">email</i>
-                </div>
-                <span>
-                  project.sarai.uplb@gmail.com
-                </span>
+            <div class="footer-contact-line">
+              <div class="footer-contact-icon">
+                <i class="material-icons">email</i>
               </div>
+              <span>
+                project.sarai.uplb@gmail.com
+              </span>
+            </div>
 
-              <div class="footer-contact-line">
-                <div class="footer-contact-icon">
-                  <i class="material-icons">location_on</i>
-                </div>
-                <span>
-                  SESAM UPLB, College, Laguna Philippines 4031
-                </span>
+            <div class="footer-contact-line">
+              <div class="footer-contact-icon">
+                <i class="material-icons">location_on</i>
               </div>
+              <span>
+                SESAM UPLB, College, Laguna Philippines 4031
+              </span>
+            </div>
 
 
           </div>
         </div>
         <div fxFlex="33">
-          <div  class="footercolumn">
+          <div class="footercolumn">
 
             <span class="footertitle">About SARAi</span>
-            <p>Project SARAi aims to develop a national crop forecasting and monitoring system for nine priority crops: rice, corn, banana, coconut, coffee, cacao, sugarcane, tomato, and soybean. This project is funded by DOST-PCAARRD.</p>
+            <div>
+
+
+              <div fxFlex="50" fxLayout="column" fxLayoutAlign="start">
+                <span>About Us</span>
+                <span>Monitoring</span>
+                <span>Suitability</span>
+                <span>Maps</span>
+                <span>Gallery</span>
+              </div>
+              <div fxFlex="50" fxLayout="column" fxLayoutAlign="start">
+                <span>Rice</span>
+                <span>Corn</span>
+                <span>Banana</span>
+                <span>Sugarcane</span>
+                <span>Tomato</span>
+                <span>Coffee</span>
+                <span>Cacao</span>
+                <span>Coconut</span>
+                <span>Soybean</span>
+
+              </div>
+
+            </div>
           </div>
         </div>
-        
-    </div>
+
+      </div>
 
 
     </mat-sidenav-content>

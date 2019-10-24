@@ -1,6 +1,6 @@
 .map {
-  min-height: 380px;
-  height: 50vh;
+  min-height: 420px;
+  height: 420px;
   padding: 0;
 }
 
@@ -18,9 +18,29 @@
   text-align:center;
 }
 
+
+.filterboxhideclass{
+
+  border: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  position: absolute;
+  top:20px;
+  left:20px;
+  z-index: 1000;
+  width: 35px;
+  height: 35px;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+              0 2px 2px 0 rgba(0, 0, 0, 0.14),
+              0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  background: #fff;
+  border-radius: 4px;
+}
+
 .filter-box {
-  width: 220px;
-  min-height: 310px;
+  width: 240px;
+  min-height: 380px;
+  height: 90%;
   border: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   cursor: move;
@@ -47,21 +67,19 @@
 }
 
 .filter-handle {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  cursor: move;
+
   width: 90%;
   margin: auto;
-  font-size: 1.4em;
-  padding-bottom: 20px;
+  font-size: 1.2em;
+  
 }
 
 
 
 .filter-forms{
   position: absolute;
-  top: 60px;
+  height: 100%;
+  width: 100%;
 }
 
 .filter-control{
@@ -358,4 +376,13 @@ tableaa{
 
 ::ng-deep .mat-select-panel {
   max-height: 80vh !important;
+}
+
+::ng-deep .mat-tab-label{
+  min-width: 60px !important;
+  padding: 0px !important;
+}
+
+.hidemenu {
+  display: none;
 }

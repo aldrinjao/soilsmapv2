@@ -175,8 +175,9 @@ export class AppComponent {
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('sampleTable') nativetable: ElementRef;
-
+  @ViewChild('filterboxshow') filterboxshow: ElementRef;
+  @ViewChild('filterboxid') filterboxid: ElementRef;
+  selectedTab = new FormControl(0);
 
   constructor(db: AngularFireDatabase, private bottomSheet: MatBottomSheet) {
 
@@ -382,7 +383,11 @@ export class AppComponent {
   }
 
   applyFilter(filterValue: string) {
+
+
+
     this.dataSource1.filter = filterValue.trim().toLowerCase();
+
   }
 
   flyToMarker(lat, long) {
@@ -414,6 +419,22 @@ export class AppComponent {
   scrollToMap(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  tabClick(tab) {
+    if (tab.index === 3) {
+      this.selectedTab.setValue(3);
+      this.filterboxid.nativeElement.classList.add('hidemenu');
+      this.filterboxshow.nativeElement.classList.remove('hidemenu')
+    }
+
+  }
+
+  showmenu() {
+    this.filterboxshow.nativeElement.classList.add('hidemenu');
+    this.filterboxid.nativeElement.classList.remove('hidemenu');
+    this.selectedTab.setValue(0);
+  }
+
 
 }
 
