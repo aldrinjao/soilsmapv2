@@ -14,6 +14,7 @@ import { MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 
 
@@ -47,6 +48,7 @@ export interface SoilSample {
 }
 
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -66,7 +68,22 @@ export class AppComponent {
 
   phLowValue = 0;
   phHighValue = 10;
-  slideroptions: Options = {
+
+  omLowValue = 0;
+  omHighValue = 100;
+
+  nLowValue = 0;
+  nHighValue = 10;
+
+  pLowValue = 0;
+  pHighValue = 100;
+
+  kLowValue = 0;
+  kHighValue = 1;
+
+
+
+  phSlideroptions: Options = {
     floor: 0,
     ceil: 10,
     showSelectionBar: true,
@@ -75,6 +92,45 @@ export class AppComponent {
       to: 'blue'
     }
   };
+
+  slideroptions: Options = {
+    floor: 0,
+    ceil: 10,
+    selectionBarGradient: {
+      from: 'black',
+      to: 'black'
+    }
+  };
+
+  omslideroptions: Options = {
+    floor: 0,
+    ceil: 100,
+    selectionBarGradient: {
+      from: 'black',
+      to: 'black'
+    }
+  };
+
+  pslideroptions: Options = {
+    floor: 0,
+    ceil: 30,
+    selectionBarGradient: {
+      from: 'black',
+      to: 'black'
+    }
+  };
+
+
+  kslideroptions: Options = {
+    floor: 0,
+    ceil: 1,
+    step: .1,
+    selectionBarGradient: {
+      from: 'black',
+      to: 'black'
+    }
+  };
+
 
   displayedColumns: string[] = [
     'expand',
@@ -122,14 +178,12 @@ export class AppComponent {
     'Bukidnon', 'Iloilo'
   ];
 
-
-
-
-
   siteFilter = [];
   cropFilter = [];
+  eventstart = 0;
+  eventend = 9999999999999;
 
-
+  
   // layergroup for each crop type
   itemsLevel1: LayerGroup = new LayerGroup();
 
@@ -177,7 +231,9 @@ export class AppComponent {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('filterboxshow') filterboxshow: ElementRef;
   @ViewChild('filterboxid') filterboxid: ElementRef;
+
   selectedTab = new FormControl(0);
+
 
   constructor(db: AngularFireDatabase, private bottomSheet: MatBottomSheet) {
 
@@ -278,7 +334,6 @@ export class AppComponent {
       tempMarker.on('mouseover', e => {
         e.target.setIcon(biggerIcon);
         e.target.setZIndexOffset('1000');
-        console.log(biggerIcon);
       });
 
       tempMarker.on('mouseout', e => {
@@ -301,7 +356,31 @@ export class AppComponent {
 
   }
 
+
+
+  addEventStart(type: string, event: MatDatepickerInputEvent<Date>) {
+    
+    let testDate = (event.value.getMonth() + 1) + ' ' + event.value.getDate() + ', ' + event.value.getFullYear();
+
+    this.eventstart = Date.parse(testDate);
+  }
+
+
+  addEventEnd(type: string, event: MatDatepickerInputEvent<Date>) {
+    let testDate = (event.value.getMonth() + 1) + ' ' + event.value.getDate() + ', ' + event.value.getFullYear();
+
+
+
+    this.eventend = Date.parse(testDate);
+  }
+
+
+
   filterSelection() {
+
+    console.log(this.eventstart);
+    console.log(this.eventend);
+
 
 
     let cropres = [];
@@ -343,10 +422,14 @@ export class AppComponent {
       return (f.phValue >= this.phLowValue && f.phValue <= this.phHighValue);
     });
 
+    // filter array for numbers in a range
+    const dateRange = this.SOIL_DATA.filter(f => {
+      return (Date.parse(f.date) >= this.eventstart && Date.parse(f.date) <= this.eventend);
+    });
+
+    console.log(dateRange);
+
     // display new filtered array
-    console.log(phRange);
-
-
 
     let res = cropres.filter(v => { // iterate over the array
       // check sample present in the second array
@@ -355,12 +438,24 @@ export class AppComponent {
     });
 
 
-    res = res.filter(v => { // iterate over the array
+    res = res.filter(v => {
+      // iterate over the array
       // check sample present in the second array
       return phRange.indexOf(v) > -1;
       // or array2.includes(v)
     });
     // make the markers
+
+    res = res.filter(v => {
+      // iterate over the array
+      // check sample present in the second array
+      return dateRange.indexOf(v) > -1;
+      // or array2.includes(v)
+    });
+    // make the markers
+
+    console.log(res);
+
     this.itemsLevel1.clearLayers();
     this.dataSource1 = new MatTableDataSource(res);
     this.dataSource1.paginator = this.paginator;
@@ -424,7 +519,7 @@ export class AppComponent {
     if (tab.index === 3) {
       this.selectedTab.setValue(3);
       this.filterboxid.nativeElement.classList.add('hidemenu');
-      this.filterboxshow.nativeElement.classList.remove('hidemenu')
+      this.filterboxshow.nativeElement.classList.remove('hidemenu');
     }
 
   }
@@ -439,11 +534,13 @@ export class AppComponent {
 }
 
 
+
 @Component({
-  selector: 'bottom-sheet-overview-example-sheet',
+  selector: 'app-bottom-sheet-overview-example-sheet',
   templateUrl: 'bottom-sheet-overview-example-sheet.html',
   styleUrls: ['./app.component.css'],
 })
+
 export class BottomSheetOverviewExampleSheet {
   constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>) { }
 

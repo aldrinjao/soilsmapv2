@@ -84,7 +84,7 @@
                     </ng-template>
 
                     <div class="filter-handle">
-                      <span>SARAi Soil Profiling & Characterization</span>
+                      SARAi Soil Profiling & Characterization v1.1
                     </div>
 
 
@@ -109,7 +109,7 @@
 
                       <mat-label>from</mat-label>
 
-                      <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+                      <input matInput [matDatepicker]="picker" placeholder="Choose a date" (dateInput)="addEventStart('input', $event)">
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
 
@@ -122,7 +122,7 @@
 
                       <mat-label>to</mat-label>
 
-                      <input matInput [matDatepicker]="topicker" placeholder="Choose a date">
+                      <input matInput [matDatepicker]="topicker" placeholder="Choose a date" (dateInput)="addEventEnd('input', $event)">
                       <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                       <mat-datepicker #topicker></mat-datepicker>
 
@@ -154,7 +154,7 @@
 
                     <table style="width: 90%;margin:auto;">
                       <tr>
-                        <td style="width: 30px;">
+                        <td style="width: 40px;">
                           <div style="text-align: center;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
                             pH
                           </div>
@@ -163,7 +163,7 @@
                         <td>
                           <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
 
-                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="phSlideroptions">
                             </ng5-slider>
 
                           </div>
@@ -181,7 +181,7 @@
                         <td>
                           <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
 
-                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            <ng5-slider [(value)]="nLowValue" [(highValue)]="nHighValue" [options]="slideroptions">
                             </ng5-slider>
 
                           </div>
@@ -199,7 +199,7 @@
                         <td>
                           <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
 
-                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            <ng5-slider [(value)]="pLowValue" [(highValue)]="pHighValue" [options]="pslideroptions">
                             </ng5-slider>
 
                           </div>
@@ -217,7 +217,7 @@
                         <td>
                           <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
 
-                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            <ng5-slider [(value)]="kLowValue" [(highValue)]="kHighValue" [options]="kslideroptions">
                             </ng5-slider>
 
                           </div>
@@ -228,14 +228,14 @@
                       <tr>
                         <td>
                           <div style="text-align: center;margin:auto;color: rgba(0,0,0,.54);font-size: 1.em;">
-                            OM
+                            OM %
                           </div>
 
                         </td>
                         <td>
                           <div style="width:100%;margin: auto;font-size: 1em;" class="custom-slider">
 
-                            <ng5-slider [(value)]="phLowValue" [(highValue)]="phHighValue" [options]="slideroptions">
+                            <ng5-slider [(value)]="omLowValue" [(highValue)]="omHighValue" [options]="omslideroptions">
                             </ng5-slider>
 
                           </div>
@@ -390,14 +390,16 @@
                   [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                   <div style="width: 100%;">
 
-                    <div style="width:  100%;text-align:right;">
-                      <a class="mapscroll" (click)="scrollToMap()">
-                        <i class="material-icons" style="padding-right: 30px;">
-                          pageview
-                        </i>
-                      </a>
-                    </div>
                     <table class="tdesc" style="border:1px solid black;padding: 10px;">
+                      <tr>
+                        <td colspan="6" style="width:  100%;text-align:right;">
+                          <a class="mapscroll" (click)="scrollToMap()"  style="margin-right: 30px;">
+                            <i class="material-icons">
+                              pageview
+                            </i>
+                          </a>
+                        </td>
+                      </tr>
                       <tr>
                         <td class="desc-label">
                           Collaborator
@@ -448,19 +450,19 @@
                           Nitrogen
                         </td>
                         <td class="desc-content">
-                          {{element.nValue}} ({{element.n}})
+                          {{element.nValue}}% ({{element.n}})
                         </td>
                         <td class="desc-label">
-                          Phosphorus
+                          Phosphorus ({{element.p_analysis}})
                         </td>
                         <td class="desc-content">
-                          {{element.pValue}} ({{element.p}})
+                          {{element.pValue}} ppm ({{element.p}})
                         </td>
                         <td class="desc-label">
                           Potassium
                         </td>
                         <td class="desc-content">
-                          {{element.kValue}} ({{element.k}})
+                          {{element.kValue}} cmolc/kg ({{element.k}})
                         </td>
 
                       </tr>
@@ -487,7 +489,7 @@
                           Organic Matter
                         </td>
                         <td class="desc-content">
-                          {{element.omValue}} ({{element.om}})
+                          {{element.omValue}}% ({{element.om}})
                         </td>
 
                       </tr>

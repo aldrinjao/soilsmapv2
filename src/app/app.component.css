@@ -370,8 +370,8 @@ tableaa{
 }
 
 .mapscroll:hover {
-   cursor: pointer;
-
+  cursor: pointer;
+  color: blue;
 }
 
 ::ng-deep .mat-select-panel {
@@ -385,4 +385,9 @@ tableaa{
 
 .hidemenu {
   display: none;
+}
+
+
+#soilstable td{
+  padding: 0px 5px;
 }
