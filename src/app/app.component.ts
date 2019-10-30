@@ -183,7 +183,10 @@ export class AppComponent {
   eventstart = 0;
   eventend = 9999999999999;
 
-  
+
+
+  startdate = new FormControl(new Date(1527782400000));
+  enddate = new FormControl(new Date());
   // layergroup for each crop type
   itemsLevel1: LayerGroup = new LayerGroup();
 
@@ -359,16 +362,20 @@ export class AppComponent {
 
 
   addEventStart(type: string, event: MatDatepickerInputEvent<Date>) {
-    
-    let testDate = (event.value.getMonth() + 1) + ' ' + event.value.getDate() + ', ' + event.value.getFullYear();
-
+    console.log(this.startdate.value);
+    let testDate = '1 1, 1970';
+    if (event.value != null) {
+      testDate = (event.value.getMonth() + 1) + ' ' + event.value.getDate() + ', ' + event.value.getFullYear();
+    }
     this.eventstart = Date.parse(testDate);
   }
 
 
   addEventEnd(type: string, event: MatDatepickerInputEvent<Date>) {
-    let testDate = (event.value.getMonth() + 1) + ' ' + event.value.getDate() + ', ' + event.value.getFullYear();
-
+    let testDate = '1 1, 2100';
+    if (event.value != null) {
+      testDate = (event.value.getMonth() + 1) + ' ' + event.value.getDate() + ', ' + event.value.getFullYear();
+    }
 
 
     this.eventend = Date.parse(testDate);
@@ -378,8 +385,6 @@ export class AppComponent {
 
   filterSelection() {
 
-    console.log(this.eventstart);
-    console.log(this.eventend);
 
 
 
@@ -503,12 +508,14 @@ export class AppComponent {
     this.createMarkers(this.SOIL_DATA);
     this.dataSource1.paginator = this.paginator;
     this.dataSource1.sort = this.sort;
-
+    this.startdate.setValue(new Date(1527782400000));
+    this.enddate.setValue(new Date());
 
     this.crops.setValue(null);
     this.sites.setValue(null);
     this.phLowValue = 0;
     this.phHighValue = 10;
+
   }
 
   scrollToMap(): void {

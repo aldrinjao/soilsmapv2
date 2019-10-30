@@ -104,12 +104,11 @@
                       </mat-select>
                     </mat-form-field>
 
-
                     <mat-form-field class="filter-control">
 
                       <mat-label>from</mat-label>
 
-                      <input matInput [matDatepicker]="picker" placeholder="Choose a date" (dateInput)="addEventStart('input', $event)">
+                      <input matInput [matDatepicker]="picker" placeholder="Choose a date" (dateInput)="addEventStart('input', $event)" [value] = 'startdate.value' >
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
 
@@ -122,7 +121,7 @@
 
                       <mat-label>to</mat-label>
 
-                      <input matInput [matDatepicker]="topicker" placeholder="Choose a date" (dateInput)="addEventEnd('input', $event)">
+                      <input matInput [matDatepicker]="topicker" placeholder="Choose a date" (dateInput)="addEventEnd('input', $event)" [value] = 'enddate.value' >
                       <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                       <mat-datepicker #topicker></mat-datepicker>
 
