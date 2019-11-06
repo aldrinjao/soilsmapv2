@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
-import { Map, latLng, tileLayer, marker, LayerGroup, control } from 'leaflet';
+import { Map, latLng, tileLayer, marker, FeatureGroup, control } from 'leaflet';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
 import { MatTable, MatTableDataSource } from '@angular/material';
@@ -111,9 +111,21 @@ export class AppComponent {
     }
   };
 
+
+  nslideroptions: Options = {
+    floor: 0,
+    ceil: 1,
+    step: .01,
+    selectionBarGradient: {
+      from: 'black',
+      to: 'black'
+    }
+  };
+
   pslideroptions: Options = {
     floor: 0,
-    ceil: 30,
+    ceil: 100,
+    step: .01,
     selectionBarGradient: {
       from: 'black',
       to: 'black'
@@ -187,11 +199,11 @@ export class AppComponent {
 
   startdate = new FormControl(new Date(1527782400000));
   enddate = new FormControl(new Date());
-  // layergroup for each crop type
-  itemsLevel1: LayerGroup = new LayerGroup();
+  // FeatureGroup for each crop type
+  itemsLevel1: FeatureGroup = new FeatureGroup();
 
-  // main layergroup
-  layerMainGroup: LayerGroup[] = [];
+  // main FeatureGroup
+  layerMainGroup: FeatureGroup[] = [];
 
   mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
     '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -327,7 +339,6 @@ export class AppComponent {
       }
 
 
-
       if (samplepoint.hasUrl === true) {
         popupContent = popupContent + '<br>Soil Profile: <a target = "new" href="' + samplepoint.url + '">View Soil Profile</a>';
       }
@@ -345,6 +356,7 @@ export class AppComponent {
       tempMarker.addTo(this.itemsLevel1);
     });
     this.itemsLevel1.addTo(this.map);
+
 
   }
 
@@ -419,6 +431,10 @@ export class AppComponent {
     }
 
 
+    // omLowValue = 0;
+    // omHighValue = 100;
+
+
     // Create new array
 
     // filter array for numbers in a range
@@ -427,12 +443,31 @@ export class AppComponent {
       return (f.phValue >= this.phLowValue && f.phValue <= this.phHighValue);
     });
 
+    const omRange = this.SOIL_DATA.filter(f => {
+
+      return (f.omValue >= this.omLowValue && f.omValue <= this.omHighValue);
+    });
+
+    const nRange = this.SOIL_DATA.filter(f => {
+
+      return (f.nValue >= this.nLowValue && f.nValue <= this.nHighValue);
+    });
+
+    const pRange = this.SOIL_DATA.filter(f => {
+
+      return (f.pValue >= this.pLowValue && f.pValue <= this.pHighValue);
+    });
+
+    const kRange = this.SOIL_DATA.filter(f => {
+
+      return (f.kValue >= this.kLowValue && f.pValue <= this.kHighValue);
+    });
+
+
     // filter array for numbers in a range
     const dateRange = this.SOIL_DATA.filter(f => {
       return (Date.parse(f.date) >= this.eventstart && Date.parse(f.date) <= this.eventend);
     });
-
-    console.log(dateRange);
 
     // display new filtered array
 
@@ -454,6 +489,34 @@ export class AppComponent {
     res = res.filter(v => {
       // iterate over the array
       // check sample present in the second array
+      return omRange.indexOf(v) > -1;
+      // or array2.includes(v)
+    });
+    // make the markers
+
+    res = res.filter(v => {
+      // iterate over the array
+      // check sample present in the second array
+      return nRange.indexOf(v) > -1;
+      // or array2.includes(v)
+    });
+    // make the markers
+
+    res = res.filter(v => {
+      // iterate over the array
+      // check sample present in the second array
+      return pRange.indexOf(v) > -1;
+      // or array2.includes(v)
+    });
+    // make the markers
+
+
+
+
+
+    res = res.filter(v => {
+      // iterate over the array
+      // check sample present in the second array
       return dateRange.indexOf(v) > -1;
       // or array2.includes(v)
     });
@@ -466,6 +529,8 @@ export class AppComponent {
     this.dataSource1.paginator = this.paginator;
     this.dataSource1.sort = this.sort;
     this.createMarkers(res);
+    this.map.fitBounds(this.itemsLevel1.getBounds());
+
   }
 
   mouseEnter() {
@@ -516,6 +581,21 @@ export class AppComponent {
     this.phLowValue = 0;
     this.phHighValue = 10;
 
+    this.nLowValue = 0;
+    this.nHighValue = 1;
+
+
+    this.pLowValue = 0;
+    this.pHighValue = 100;
+
+    this.kLowValue = 0;
+    this.kHighValue = 1;
+
+    this.omLowValue = 0;
+    this.omHighValue = 100;
+
+
+    this.map.fitBounds(this.itemsLevel1.getBounds());
   }
 
   scrollToMap(): void {
