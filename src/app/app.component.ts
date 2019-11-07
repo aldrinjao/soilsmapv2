@@ -135,8 +135,8 @@ export class AppComponent {
 
   kslideroptions: Options = {
     floor: 0,
-    ceil: 1,
-    step: .1,
+    ceil: 10,
+    step: .01,
     selectionBarGradient: {
       from: 'black',
       to: 'black'
@@ -374,7 +374,6 @@ export class AppComponent {
 
 
   addEventStart(type: string, event: MatDatepickerInputEvent<Date>) {
-    console.log(this.startdate.value);
     let testDate = '1 1, 1970';
     if (event.value != null) {
       testDate = (event.value.getMonth() + 1) + ' ' + event.value.getDate() + ', ' + event.value.getFullYear();
@@ -460,7 +459,7 @@ export class AppComponent {
 
     const kRange = this.SOIL_DATA.filter(f => {
 
-      return (f.kValue >= this.kLowValue && f.pValue <= this.kHighValue);
+      return (f.kValue >= this.kLowValue && f.kValue <= this.kHighValue);
     });
 
 
@@ -510,6 +509,13 @@ export class AppComponent {
     });
     // make the markers
 
+    res = res.filter(v => {
+      // iterate over the array
+      // check sample present in the second array
+      return kRange.indexOf(v) > -1;
+      // or array2.includes(v)
+    });
+    // make the markers
 
 
 
@@ -522,7 +528,6 @@ export class AppComponent {
     });
     // make the markers
 
-    console.log(res);
 
     this.itemsLevel1.clearLayers();
     this.dataSource1 = new MatTableDataSource(res);
@@ -589,7 +594,7 @@ export class AppComponent {
     this.pHighValue = 100;
 
     this.kLowValue = 0;
-    this.kHighValue = 1;
+    this.kHighValue = 10;
 
     this.omLowValue = 0;
     this.omHighValue = 100;
