@@ -1,0 +1,819 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+
+
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+
+
+<link rel="stylesheet" href="./marker-cluster/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="./marker-cluster/dist/MarkerCluster.Default.css" />
+<link rel="stylesheet" href="./mapstyles/mapstyle.css" />
+<link rel="stylesheet" href="./leaflet-search/leaflet-search.css">
+
+<script src="./marker-cluster/dist/leaflet.markercluster-src.js"></script>
+<script src="./leaflet-search/leaflet-search.js"></script>
+
+<script src="./data/incidentdata.js"></script>
+<script src="./data/municipaldata.js"></script>
+<script src="./data/regionaldata.js"></script>
+<script src="./data/provincialdata.js"></script>
+<script src="./data/date.js"></script>
+
+<style>
+    .leaflet-left{
+        left:300;
+    }
+</style>
+<div id="mapid">
+
+
+    <div id="dimmedOverlay" onclick="modalClose()"></div>
+    <div id="introModal" onclick="modalClose()">
+        <img src="./icons/info.svg" class="infoicon "
+            style="position: absolute; left:20;top:25; width: 25px;cursor:pointer;">
+
+        <div class="modalTitle">
+            Welcome to the Critical Events and Monitoring System <br> Map of COVID-19 Related Incidents!
+
+        </div>
+
+
+        <div>
+            <p>
+                In response to the COVID-19 situation, International Alert Philippines expanded its Critical Events
+                Monitoring System (CEMS) to monitor tensions and violence related to the pandemic. The reports are
+                visually presented through maps with the objective of not only information dissemination but also
+                for data utilization in terms of programming among local governments to effectively respond to the
+                tensions and pressures which may lead to violent conflict.
+            </p>
+        </div>
+
+        <div>
+            <h3>How to Use:</h3>
+        </div>
+        <div class="tutItem">
+            <div style="float: left;width: 100px;">
+                <img class="img-valign" src="./icons/tutlayers.png" style="width: 100px;">
+            </div>
+            <div style="float: left;width: 490px;"><span style="font-weight: bold;">Click</span> on the buttons on the
+                control panel to switch to different map
+                of overlays</div>
+
+
+
+        </div>
+
+        <div class="tutItem">
+            <div style="float: left;width: 100px;">
+                <img class="img-valign" src="./icons/tutmarkers.png" style="width: 100px;">
+            </div>
+            <div style="float: left;width: 490px;"><span style="font-weight: bold;">Check</span> the checkboxes to
+                display
+                the reported incidents related to
+                COVID-19</div>
+
+        </div>
+
+
+        <div class="tutItem">
+            <div style="float: left;width: 100px;">
+                <img class="img-valign" src="./icons/tutmarker.png" style="width: 100px;">
+            </div>
+            <div style="float: left;width: 490px;"><span style="font-weight: bold;">Click</span> the circle icon on the
+                map to see
+                all reports within that area</div>
+
+        </div>
+
+        <div class="tutItem">
+            <div style="float: left;width: 100px;">
+                <img class="img-valign" src="./icons/tutcontrol.png" style="width: 100px;">
+            </div>
+            <div style="float: left;width: 490px;"><span style="font-weight: bold;">Interact</span> with the map by
+                zooming in or out, adjusting the overlay
+                opacity, and changing basemaps.</div>
+
+        </div>
+
+        <div style="position: absolute;bottom: 1%;text-align: center;width: 93%;">
+            Click to close
+        </div>
+
+
+    </div>
+
+
+    <div id="mapControlPanel" onmouseover="disableMapInteraction()" onmouseout="enableMapInteraction()">
+        <img src="./icons/info.svg" class="infoicon" title="Click to view the tutorial window"
+            style="position: absolute; right:10;top:10; width: 20px;" onclick="modalOpen()">
+
+
+
+        <div id="apptitle">
+            <span style="font-size:22px;line-height: normal;font-weight: 600;" class="clickabletitle"> CRITICAL EVENTS
+                MONITORING SYSTEM</span>
+            <span style="font-size:20px;line-height: normal;font-weight: 300;"> MAP OF COVID-19 RELATED INCIDENTS</span>
+        </div>
+
+        <div id="boundaryPanel">
+            <div style="width: 100%;margin: auto;width: 100%;" class="tooltip">
+                <span style="font-size: 16px;padding:10px;" class="clickabletitle"
+                    onclick="alert('a')">Boundaries</span>
+                <span class="tooltiptext">Administrative Boundaries of the Phillipines<br><br>Click on the buttons to
+                    see regional, provincial, municipal, or barangay borders.</span>
+
+            </div>
+
+            <div id="locreg" class='boundarybutton bbleft selected' onclick="locButtonSelected(this)">Region</div>
+            <div id="locprov" class='boundarybutton bbright' onclick="locButtonSelected(this)">Province</div>
+            <div id="locmun" class='boundarybutton bbleft' onclick="locButtonSelected(this)">Municipality</div>
+            <div id="locbrg" class='boundarybutton bbright' onclick="locButtonSelected(this)">Barangay</div>
+        </div>
+
+        <div id="issuesPanel">
+
+
+
+            <div style="width: 100%;" class="tooltip"><span class="clickabletitle "
+                    style="font-size: 16px;padding:5px;margin: 5px;">CEMS
+                    Incidents</span><br>
+                <div style="font-size: 14px;padding:5px;margin-left: 5px;" id="cemsdate"></div>
+                <span class="tooltiptext">These incidents were reported by ,asda</span>
+
+            </div>
+
+            <div style="margin:10px">
+                <div style="float: left;">
+                    <input type="checkbox" id="govcbox" checked onclick="markerCheckBox()">
+                    <img src='./icons/green.png' style="width: 20px;">
+                </div>
+                <div style="float: left;width:70%;margin-left:5px;" class="clickabletitle tooltip"> Government/Private
+                    Sector
+                    Response
+                    <span class="tooltiptext tooltiptextincident">Tooltip text</span>
+                </div>
+            </div>
+            <p class="clear">&nbsp;</p>
+
+            <div style="margin:10px">
+                <div style="float: left;">
+                    <input class="img-valign" type="checkbox" id="tencbox" checked onclick="markerCheckBox()">
+                    <img class="img-valign" src='./icons/yellow.png' style="width: 20px;">
+                </div>
+                <div style="float: left;width:70%;margin-left:5px;" class="clickabletitle tooltip">Tension
+                    <span class="tooltiptext tooltiptextincident">Tooltip text</span>
+                </div>
+            </div>
+            <p class="clear">&nbsp;</p>
+            <div style="margin:10px">
+                <div style="float: left;">
+                    <input class="img-valign" type="checkbox" id="viocbox" checked onclick="markerCheckBox()">
+                    <img class="img-valign" src='./icons/red.png' style="width: 20px;">
+
+
+
+                </div>
+                <div style="float: left;width:70%;margin-left:5px;" class="clickabletitle tooltip">Violence
+                    <span class="tooltiptext tooltiptextincident">Tooltip text</span>
+                </div>
+            </div>
+            <p class="clear">&nbsp;</p>
+            <div style="margin:10px">
+                <div style="float: left;">
+                    <img class="img-valign" src='./icons/cluster.png' style="width: 30px;">
+
+
+
+                </div>
+                <div style="float: left;width:70%;margin-left:5px;margin-top:10px;" class="clickabletitle tooltip">
+                    Cluster Count
+                    <span class="tooltiptext tooltiptextincident">These numbered markers show how many individual
+                        reports there are around the area.</span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="dohPanel">
+            <div style="width: 100%;margin: auto;width: 100%;" class="tooltip">
+                <span style="font-size: 16px;padding:5px;margin:5px;" class="clickabletitle" onclick="alert('a')">DOH
+                    COVID-19 Cases</span>
+                <br>
+                <div style="font-size: 14px;padding:5px;margin-left: 5px;" id="dohdate"></div>
+
+                <span class="tooltiptext">Tooltip text3 <br>asdasd</span>
+
+            </div>
+            <div id="dontshow" class='boundarybutton bbright selected' onclick="dohButtonSelected(this)">Don't show
+            </div>
+
+            <div id="show" class='boundarybutton bbright' onclick="dohButtonSelected(this)">Show
+            </div>
+
+        </div>
+
+
+        <div id="panelfooter" style="display:flex;align-items:flex-end;">
+
+            <div>
+                <img src="./icons/alert-logo.png" width="40px">
+            </div>
+            <div>
+                <img src="./icons/ausaid.png" width="80px">
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+    <div id="mapControlIcon" onclick="hideicon()" onmouseover="disableMapInteraction()"
+        onmouseout="enableMapInteraction()">
+    </div>
+
+
+    <div id="slidecontainerID" class="slidecontainer" onmouseover="disableMapInteraction()"
+        onmouseout="enableMapInteraction()">
+        <div class="clickabletitle tooltip">
+            <img class="img-valign" src="./icons/opacity.png" style="height: 13.64px;"> <span>boundary opacity</span>
+            <span class="tooltiptext tooltipopacity">Adjust the opacity of the boundary layer. <br><br> You can see more
+                of the overlay by adjusting moving the slider to the left (-) and see more of the base map underneath by
+                moving the slider to the right(+).</spam>
+        </div>
+        <div>
+            <img class="img-valign" src="./icons/minus.png" style="margin-top:-13.64;height: 13.64px;"> <input
+                type="range" min="0" max="100" value="30" class="slider" id="myRange" style="width:129px;"> <img
+                class="img-valign" src="./icons/plus.png" style="margin-top:-13.64;height: 13.64px;">
+        </div>
+    </div>
+
+
+</div>
+
+
+<script>
+    //update the text display on as of for both sections
+    updateDates();
+
+    var mapOptions = {
+        zoomControl: false,
+        minZoom: 5,
+        maxZoom: 18
+    }
+
+    var map = L.map('mapid', mapOptions).setView([12, 120], 5);
+
+    disableMapInteraction();
+
+
+
+    map.setMaxBounds(map.getBounds());
+    map.setView([12, 120], 6);
+    map.createPane('labels');
+    map.createPane('markerspane');
+    map.createPane('respondents');
+
+
+    map.getPane('respondents').style.zIndex = 300;
+    map.getPane('labels').style.zIndex = 500;
+    map.getPane('markerspane').style.zIndex = 501;
+    map.getPane('labels').style.pointerEvents = 'none';
+
+
+    var currentstlye = style1;
+    L.control.zoom({
+        position: 'topright'
+    }).addTo(map);
+
+
+    // initialize basemaps
+
+    var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+        attribution: '©OpenStreetMap, ©CartoDB'
+    }).addTo(map);
+
+    var positronLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+        attribution: '©OpenStreetMap, ©CartoDB',
+        pane: 'labels'
+    }).addTo(map);
+
+
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    })
+
+    var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&language=EN', {
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}&language=EN', {
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}&language=EN', {
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}&language=EN', {
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+
+    var baseMaps = {
+        "Carto DB": positron,
+        "Google Satellite": googleSat,
+        "Google Hyybrid": googleHybrid,
+        "Google Streets": googleStreets,
+        "Google Terrain": googleTerrain,
+        "Open Street Maps": osm
+    };
+
+    var overlays = {
+        "Carto DB Labels": positronLabels
+    }
+    L.control.layers(baseMaps, overlays).addTo(map);
+
+    // add initial overlay 
+    geojson = L.geoJson(regionaldata, {
+        style: style1,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+
+
+    // add markers
+
+    var markers = L.markerClusterGroup();
+
+    var IssueIcon = L.Icon.extend({
+        options: {
+            iconSize: [32, 42],
+            popupAnchor: [0, -20]
+
+        }
+    });
+
+    var greenIcon = new IssueIcon({
+        iconUrl: './icons/green.png',
+    })
+    var yellowIcon = new IssueIcon({
+        iconUrl: './icons/yellow.png',
+    })
+    var redIcon = new IssueIcon({
+        iconUrl: './icons/red.png',
+    })
+
+
+    var arrayLength = incidentdata.length;
+
+    var govIssues = [];
+    var tenIssues = [];
+    var vioIssues = [];
+
+    var allIssues = [];
+
+    //sort the incidents
+    for (var i = 0; i < arrayLength; i++) {
+
+        var temp;
+        if (incidentdata[i].issue == 'Tensions') {
+            tenIssues.push(incidentdata[i]);
+            temp = yellowIcon;
+        } else if (incidentdata[i].issue == 'Government/Private sector response') {
+            govIssues.push(incidentdata[i]);
+            temp = greenIcon;
+        } else if (incidentdata[i].issue == 'Violence') {
+            vioIssues.push(incidentdata[i]);
+            temp = redIcon;
+        }
+
+        //Do something
+    }
+
+
+
+    markerCheckBox();
+
+    var info = L.control();
+
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+        this.update({}, true);
+        return this._div;
+    };
+
+
+
+
+    // method that we will use to update the control based on feature properties passed
+    info.update = function (props, nothovering) {
+
+
+        if (nothovering) {
+            this._div.innerHTML = '<h4>Hover over an area</h4>';
+
+        } else {
+            if (currentstlye == style0) {
+
+                this._div.innerHTML =
+                    '<h4>Covid Cases (May 25, 2020)</h4>' +
+                    (props ? '<h4>' + props.area + '</h4> ' : '') +
+                    (props ? '' + props.covidcases + ' confirmed cases' : 'Hover over a an area');
+
+
+            } else {
+                this._div.innerHTML =
+                    '<h4>Area</h4>' +
+                    (props ? '<h4>' + props.area + '</h4> ' : '');
+
+            }
+        }
+    };
+    info.addTo(map);
+
+
+    var legend = L.control({ position: 'topright' });
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = [1, 25, 50, 100, 200, 500, 1000],
+            labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+
+        return div;
+    };
+
+
+
+
+    var slider = document.getElementById("myRange");
+
+
+    slider.oninput = function () {
+
+        geojson.setStyle({
+
+            fillOpacity: (100 - this.value) / 100
+        });
+
+    }
+
+
+
+
+    function markerCheckBox() {
+        allIssues = [];
+        // Get the checkbox
+        var tencheckBox = document.getElementById("tencbox");
+        var viocheckBox = document.getElementById("viocbox");
+        var govcheckBox = document.getElementById("govcbox");
+        // Get the output text
+
+        // If the checkbox is checked, display the output text
+        if (tencheckBox.checked == true) {
+            allIssues = allIssues.concat(tenIssues);
+        }
+        if (govcheckBox.checked == true) {
+            allIssues = allIssues.concat(govIssues);
+        }
+        if (viocheckBox.checked == true) {
+            allIssues = allIssues.concat(vioIssues);
+        }
+        markers.clearLayers();
+
+        createMarkers();
+
+
+        // markers.addTo(map);
+    }
+
+
+
+
+    function createMarkers() {
+
+        for (var i = 0; i < allIssues.length; i++) {
+
+            var temp;
+            if (allIssues[i].issue == 'Tensions') {
+                temp = '#ffba00';
+            } else if (allIssues[i].issue == 'Government/Private sector response') {
+                temp = '#477827';;
+            } else if (allIssues[i].issue == 'Violence') {
+                temp = '#9e0000';
+            }
+
+            var markerOptions = {
+                title:allIssues[i].barangay +" | "+allIssues[i].city +" | "+allIssues[i].municipality+" | "+allIssues[i].province  ,
+                radius: 8,
+                fillColor: temp,
+                color: "#000000",
+                fillOpacity: 1,
+                weight: 2,
+                pane: 'markerspane',
+                test:'22'
+
+            };
+
+
+            var marker = L.circleMarker(new L.LatLng(allIssues[i].lat, allIssues[i].lng), markerOptions);
+            var town;
+            if (allIssues[i].municipality != "") {
+                town = allIssues[i].municipality
+            } else {
+                town = allIssues[i].city
+            }
+            var popuphtml =
+                "<span class='popuplabel'>Date: </span>" + allIssues[i].date + "&nbsp&nbsp&nbsp&nbsp<span class='popuplabel'>Date Reported:</span> " + allIssues[i].datereported +
+                "<br><span class='popuplabel'>Issue: </span>" + allIssues[i].issue + "<br>" +
+                "<span class='popuplabel'>City/Municipality: </span>" + town + "<br>" +
+                "<span class='popuplabel'>Details: </span>" + allIssues[i].details + "<br>"
+            marker.bindPopup(popuphtml);
+            markers.addLayer(marker);
+
+        }
+
+        map.addLayer(markers);
+
+
+
+	// map.addControl( new L.Control.Search({
+	// 	url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+    //     position:'topleft',
+	// 	jsonpParam: 'json_callback',
+	// 	propertyName: 'display_name',
+	// 	propertyLoc: ['lat','lon'],
+	// 	marker: L.circleMarker([0,0],{radius:30}),
+	// 	autoCollapse: true,
+	// 	autoType: false,
+	// 	minLength: 5
+	// }) );
+
+
+
+	var controlSearch = new L.Control.Search({
+		position:'topleft',		
+		layer: markers,
+		initial: false,
+		zoom: 18,
+		marker: L.circleMarker([0,0],{radius:30})
+	}).addTo(map);
+
+
+
+
+        var circle = L.circle([14.786542, 121.386022], {
+            opacity: 0,
+            fillColor: "#f03",
+            fillOpacity: 0.1,
+            radius: 20000,
+            pane: 'respondents'
+        }).addTo(map);
+
+        var circle = L.circle([14.586542, 121.386022], {
+            opacity: 0,
+            fillColor: "#f03",
+            fillOpacity: 0.5,
+            radius: 20000,
+            pane: 'respondents'
+        }).addTo(map);
+
+        var circle = L.circle([14.786542, 121.586022], {
+            opacity: 0,
+            fillColor: "#f03",
+            fillOpacity: 0.5,
+            radius: 20000,
+            pane: 'respondents'
+        }).addTo(map);
+
+        var circle = L.circle([14.586542, 121.56022], {
+            opacity: 0,
+            fillColor: "#f03",
+            fillOpacity: 0.5,
+            radius: 20000,
+            pane: 'respondents'
+        }).addTo(map);
+
+    }
+
+
+
+
+    function getColor(d) {
+        //alert(d);
+        return d > 1000 ? '#67340B' :
+            d > 500 ? '#834311' :
+                d > 200 ? '#964C15' :
+                    d > 100 ? '#A45518' :
+                        d > 50 ? '#B5651D' :
+                            d > 25 ? '#C89C49' :
+                                d > 1 ? '#FFEDA0'
+                                    : '#FFFFFF';
+    }
+
+
+    function style0(feature) {
+        var opacity = (100 - document.getElementById("myRange").value) / 100;
+
+        return {
+            fillColor: getColor(feature.properties.covidcases),
+            weight: 2,
+            opacity: .1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: opacity
+        };
+    }
+
+
+    function style1() {
+        var opacity = (100 - document.getElementById("myRange").value) / 100;
+
+        return {
+            fillColor: 'white',
+            weight: 2,
+            opacity: 1,
+            color: 'black',
+            dashArray: '3',
+            fillOpacity: opacity
+        };
+    }
+
+
+
+    function highlightFeature(e) {
+        var layer = e.target;
+        info.update(layer.feature.properties, false);
+    }
+
+    function resetHighlight(e) {
+        // geojson.resetStyle(e.target);
+
+        temp = {
+            covidcases: '- ',
+            area: 'Hover over an Area'
+        }
+        info.update(temp, true);
+
+
+    }
+
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds());
+    }
+
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight
+        });
+    }
+
+    // zoomedOut.setOpacity(.5);//pwede icontrol
+
+
+    function switchlayer(layer) {
+        map.removeLayer(geojson);
+
+        if (layer == 'locreg') {
+            layer = regionaldata;
+
+        } else if (layer == 'locmun') {
+            layer = municipaldata;
+        } else if (layer == 'locprov') {
+            layer = provincialdata;
+        } else if (layer == 'locbrg') {
+            layer = brgcov;
+        }
+
+        geojson = L.geoJson(layer, {
+            style: currentstlye,
+            onEachFeature: onEachFeature
+
+        }).addTo(map);
+
+
+    }
+
+
+    function removeSelected() {
+        document.getElementById('dontshow').classList.remove('selected');
+        document.getElementById('show').classList.remove('selected');
+
+    }
+
+    function removeLoCSelected() {
+        document.getElementById('locreg').classList.remove('selected');
+        document.getElementById('locprov').classList.remove('selected');
+        document.getElementById('locmun').classList.remove('selected');
+        document.getElementById('locbrg').classList.remove('selected');
+
+    }
+
+    function setSelected(id) {
+        document.getElementById(id).classList.add('selected');
+    }
+
+
+    function dohButtonSelected(t) {
+        removeSelected();
+        setSelected(t.id);
+        if (t.id == 'dontshow') {
+            currentstlye = style1
+            map.removeControl(legend);
+        }
+        else {
+            currentstlye = style0
+
+            map.addControl(legend);
+
+        }
+        geojson.setStyle(currentstlye);
+    }
+
+
+
+
+
+    function locButtonSelected(t) {
+
+        if (t.id == "dontshow") {
+
+            geojson.setStyle(style1);
+            map.removeControl(legend);
+            map.removeControl(info);
+            removeLoCSelected();
+            setSelected(t.id);
+
+        } else {
+            removeLoCSelected()
+            // map.addControl(info);
+            // map.addControl(legend);
+            switchlayer(t.id);
+            setSelected(t.id);
+        }
+    }
+
+
+    function enableMapInteraction() {
+
+        map.dragging.enable();
+        map.touchZoom.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        map.boxZoom.enable();
+        map.keyboard.enable();
+
+
+    }
+
+    function disableMapInteraction() {
+
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+
+
+    }
+
+    function modalClose() {
+        enableMapInteraction()
+
+        document.getElementById('dimmedOverlay').classList.add('hiddenmodal');
+        document.getElementById('introModal').classList.add('hiddenmodal');
+
+    }
+
+    function modalOpen() {
+
+        disableMapInteraction();
+
+        document.getElementById('dimmedOverlay').classList.remove('hiddenmodal');
+        document.getElementById('introModal').classList.remove('hiddenmodal');
+
+    }
+
+    function updateDates() {
+        document.getElementById('cemsdate').innerHTML = incidentAsOfDate;
+        document.getElementById('dohdate').innerHTML = incidentAsOfDate;
+
+    }
+
+</script>
