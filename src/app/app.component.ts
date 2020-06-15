@@ -308,11 +308,13 @@ export class AppComponent {
 
 
   createMarkers(items) {
-
+    console.log('22222');
     items.forEach(samplepoint => {
+      console.log(samplepoint.crop);
 
       const regularIcon = this.markers.iconList[samplepoint.crop].regular;
       const biggerIcon = this.markers.iconList[samplepoint.crop].big;
+
 
       // tslint:disable-next-line:max-line-length
       const tempMarker = marker([samplepoint.lat, samplepoint.long], { icon: regularIcon });
