@@ -172,7 +172,8 @@ export class AppComponent {
     'Sugarcane',
     'Tomato',
     'Banana',
-    'Soybean'
+    'Soybean',
+    'Coconut'
   ];
 
   sites = new FormControl();
@@ -357,6 +358,7 @@ export class AppComponent {
       });
       tempMarker.addTo(this.itemsLevel1);
     });
+    
     this.itemsLevel1.addTo(this.map);
 
 
@@ -367,7 +369,7 @@ export class AppComponent {
     control.zoom({
       position: 'topright'
     }).addTo(map);
-    // this.map.setMaxBounds(map.getBounds());
+    this.map.setMaxBounds(map.getBounds());
     this.map.setView([14.1699, 121.2441], 13);
     control.layers(this.basemaps).addTo(map);
 
@@ -536,7 +538,8 @@ export class AppComponent {
     this.dataSource1.paginator = this.paginator;
     this.dataSource1.sort = this.sort;
     this.createMarkers(res);
-    this.map.fitBounds(this.itemsLevel1.getBounds());
+    console.log(this.itemsLevel1.getBounds());
+    // this.map.fitBounds(this.itemsLevel1.getBounds());
 
   }
 
